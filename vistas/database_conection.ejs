@@ -1,0 +1,88 @@
+
+<%-include('plantillas/cabecera', {titulo: 'credenciales'})%>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">conectar a base de datos</a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+
+        <!--------------------- FORMULARIO PARA INSERTAR LAS CREDENCIALES A LA BASE DE DATOS---------------------- -->
+        
+        <div class="container">
+            
+            <form action="/guardar_credenciales" method="post">
+                <% if (dbdatos.config.server == undefined) { %>
+                    <div class="form-group">
+                        <label for="server">server:</label>
+                        <input type="text" id="server" name="server" required value="localhost">
+                    </div>
+                    <div class="form-group">
+                        <label for="user">user:</label>
+                        <input type="text" id="user" name="user" required value="sa">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password:</label>
+                        <input type="password" id="password" name="password" required value="yefry">
+                    </div>
+                    <div class="form-group">
+                        <label for="oltp">base de datos origen (OLTP):</label>
+                        <input type="text" id="oltp" name="origen" required value="AUTOMOTRIZ">
+                    </div>
+                    <div class="form-group">
+                        <label for="olap">base de datos destino (OLAP):</label>
+                        <input type="text" id="olap" name="destino" required value='DW_AUTOMOTRIZ'>
+                    </div>
+
+
+                <% } else { %>
+                    <div class="form-group">
+                        <label for="server">server:</label>
+                        <input type="text" id="server" name="server" required value=<%=dbdatos.config.server %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="user">user:</label>
+                        <input type="text" id="user" name="user" required value=<%=dbdatos.config.user %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password:</label>
+                        <input type="password" id="password" name="password" required value=<%=dbdatos.config.password %>>
+                    </div>
+                    <div class="form-group">
+                        <label for="oltp">base de datos origen (OLTP):</label>
+                        <input type="text" id="oltp" name="origen" required value=<%= dbdatos.databases.origen%>>
+                    </div>
+                    <div class="form-group">
+                        <label for="olap">base de datos destino (OLAP):</label>
+                        <input type="text" id="olap" name="destino" required  value=<%= dbdatos.databases.destino%>>
+                    </div>
+
+
+
+
+
+                <% } %>
+                <div class="form-group">
+                    <input type="submit" value="Guardar">
+                </div>
+                <!-- -------------------- MUSTRA UN ERROR EN CASO QUE LA CONSULTA PROSENTE UNO --------------------- -->
+                <% if (mensaje != '_') { %>
+                    <div>
+                        <%= mensaje %>
+                    </div>
+                <% } %>
+            </form>
+        </div>
+
+</body>
+</html>
