@@ -65,10 +65,12 @@ etl.post = async (req, res) => {
         if(respuesta.origen != undefined) {
             constantes.origen = respuesta.origen;
             constantes.consulta = `select * from ${constantes.origen};`
+            constantes.campos_tabla_oltp = [];
         };
     }else{
         if(respuesta.consulta != undefined){
             constantes.consulta = respuesta.consulta 
+            constantes.campos_tabla_oltp = [];
         }
     }
 
@@ -81,7 +83,8 @@ etl.post = async (req, res) => {
                         try {
                             const pool = await dbdatos.getConnection(); //CONECCION A LA BASE DE DATOS
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO
-                            const campos_tabla_olap = await pool.request().query(`use ${dbdatos.databases.destino}; select column_name, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, 0 as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino}'`);     
+                            const campos_tabla_olap = await pool.request().query(
+                                `use ${dbdatos.databases.destino}; select column_name, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino}'`);     
                             
                             
                             constantes.campos_tabla_olap = campos_tabla_olap.recordset;
@@ -91,31 +94,27 @@ etl.post = async (req, res) => {
                             
                             const campos_tabla_oltp = await pool.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
                             if(constantes.campos_tabla_oltp.length === 0){
-                                    const campos = campos_tabla_oltp.recordset;
-                                    for (let prop in campos[0]){
-                                        constantes.campos_tabla_oltp.push(prop);
-                                    }
+                                        const campos = campos_tabla_oltp.recordset;
+                                        for (let prop in campos[0]){
+                                            constantes.campos_tabla_oltp.push(prop);
+                                        }
                             }else{
 
-                                if(respuesta.concatenar != undefined) {
-
-                                    
-
-                                    for(let i=0; i<constantes.campos_tabla_olap.length; i++){
-                                        constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
-                                        constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
-                                        constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                        constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
-                                        
-                                    }
-                                }
+                                        if(respuesta.concatenar != undefined) {
+                                                for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                    constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
+                                                    constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                    constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
+                                                    constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
+                                                }
+                                        }
                             }
                             
                                         
                             
                                     
-                                    objeto_etl.tabla_destino = constantes.destino;
-                                    objeto_etl.consulta = constantes.consulta;
+/*                                     objeto_etl.tabla_destino = constantes.destino;
+                                    objeto_etl.consulta = constantes.consulta; */
                                 
                             mensaje = '_';
                         } catch (error) {
@@ -131,8 +130,8 @@ etl.post = async (req, res) => {
 
 
 
-/*     console.log('respuesta:')
-    console.log(respuesta);*/
+     console.log('respuesta:')
+    console.log(respuesta);
     console.log('constantes:')
     console.log(constantes) 
 

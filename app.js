@@ -4,6 +4,25 @@ const path = require('path');
 const morgan = require('morgan');
 const rutas = require('./routes/rutas')
 
+/* ******************************************************************************************************************************* */
+/* const {leer_archivo, actualizar_etl} = require('./modificar_ETL')
+
+actualizar_etl();
+leer_archivo();
+ */
+
+
+
+
+
+/* ******************************************************************************************************************************* */
+
+
+let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
+console.log(arr);
+arr = arr.join(',\' \',')
+arr = ' concat('+arr+') '
+console.log(arr);
 
 
 const objeto = {
