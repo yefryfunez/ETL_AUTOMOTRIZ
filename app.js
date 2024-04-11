@@ -1,7 +1,7 @@
 const express = require('express'); 
 const app = express()
 const path = require('path');
-const morgan = require('morgan');
+//const morgan = require('morgan');
 const rutas = require('./routes/rutas')
 
 /* ******************************************************************************************************************************* */
@@ -17,13 +17,29 @@ leer_archivo();
 
 /* ******************************************************************************************************************************* */
 
+/*  
+ let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
+console.log(arr); */
+/*
+function concatenarSqlServer(arreglo, modificar,alias){
+  let campos = '';
+  campos = arreglo.join(',\'  \',');
+  campos = 'concat('+campos+')';
+  if(modificar === 'Mayuscula') campos = 'upper('+campos+')';
+  if(modificar === 'Minuscula') campos = 'lower('+campos+')';
+  campos = campos + ' as ' + alias;
+  return campos;
+}
 
-let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
-console.log(arr);
-arr = arr.join(',\' \',')
+console.log('campos concatenados ????????????????????????????????????????????')
+console.log(concatenarSqlServer(arr, 'Minuscula', 'nombre')) */
+
+/* arr.splice(2,0,'jaja')
+console.log(arr); */
+/*arr = arr.join(',\' \',')
 arr = ' concat('+arr+') '
 console.log(arr);
-
+ */
 
 const objeto = {
     nombre: 'Juan',
@@ -48,7 +64,7 @@ app.set('views', path.join(__dirname,'vistas'));
 
 
 //middelwares //utilizan la palabra use
-app.use(morgan('dev'))
+//app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 

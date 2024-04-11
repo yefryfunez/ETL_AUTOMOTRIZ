@@ -4,8 +4,8 @@ let mensaje = '_';
 
 
 database_conection.get = (req, res) => {
-    dbdatos.close();
-    dbdatos.iniciar();
+    
+    //dbdatos.iniciar();
     res.render('database_conection',{
         dbdatos : dbdatos,
         mensaje,
@@ -29,7 +29,7 @@ database_conection.post = async (req, res) => {
     dbdatos.databases.destino = req.body.destino;
     dbdatos.databases.origen = req.body.origen;
     
-    console.log(req.body); //mostrar informacion de los datos obtenidos
+    //console.log(req.body); //mostrar informacion de los datos obtenidos
     
     try {
         //conexion a la base de datos
@@ -49,7 +49,6 @@ database_conection.post = async (req, res) => {
         dbdatos.tablas_destino = tablas_destino.recordset;
         
         dbdatos.tipo_de_dato = tipos_de_dato.recordset;//guardar los tipos de datos del servidor sql server 
-        //console.log(dbdatos); 
 
         mensaje = '_';
         res.redirect('/etlget');

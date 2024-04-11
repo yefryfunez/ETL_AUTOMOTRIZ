@@ -26,7 +26,7 @@
           <!-- ================================================================================================================================================ -->     
           <form action="/etlpost" method="post">
             <select name="tipo" id="tipo" required onchange="this.form.submit()" >
-              <option value=<%=constantes.tipo%> selected ><%=constantes.tipo%></option>
+              <option value="<%=constantes.tipo%>" selected ><%=constantes.tipo%></option>
               <% if (constantes.tipo === 'tabla') { %>
                     <option value="consulta">Consulta</option>
               <% } else { %>
@@ -41,9 +41,9 @@
                 <% if (constantes.tipo === 'tabla') { %>
                           <h4>seleccione la tabla de origen</h4>
                           <select name="origen" id='origen' required >
-                              <option value=<%=constantes.origen%> selected disabled><%=constantes.origen%></option>
+                              <option value="<%=constantes.origen%>" selected disabled><%=constantes.origen%></option>
                             <% dbdatos.tablas_origen.forEach(elemento => { %>
-                              <option value=<%=elemento.table_name %>><%=elemento.table_name %></option>
+                              <option value="<%=elemento.table_name %>"><%=elemento.table_name %></option>
                             <% }) %>
                           </select>
                 <% } else { %>
@@ -52,21 +52,19 @@
                   <!--                                              EN CASO DE QUE ELIJA LA OPCION CONSULTA    -->
                   <!-- ================================================================================================================================================ -->     
                           <h4>Inserte la consulta</h4>
-                          <input name="consulta" id="consulta" type="text" placeholder="Ingrese la consulta a la base de datos oltp." value = "<%=constantes.consulta%>">
-                        
+                          <input name="consulta" id="consulta" type="text" placeholder="Ingrese la consulta a la base de datos oltp." value = "<%=constantes.consulta%>">     
                 <% } %>
                       
-                      
-                      
+  
                       
                   <!--                                    SELECT PARA SELECCIONAR TABLA O CUNSOLTA PARA LA TABLA DE DESTINO  -->
                   <!-- ================================================================================================================================================ -->     
             <hr><hr>
             <h4>seleccione la tabla de destino</h4>
                 <select name="destino" id="destino" required onchange="this.form.submit()">
-                  <option value=<%=constantes.destino%> selected disabled><%=constantes.destino%></option>
+                  <option value="<%=constantes.destino%>" selected disabled><%=constantes.destino%></option>
                   <% dbdatos.tablas_destino.forEach(elemento => { %>
-                    <option value=<%=elemento.table_name %>><%=elemento.table_name %></option>
+                    <option value="<%=elemento.table_name %>"><%=elemento.table_name %></option>
                   <% }) %>
                 </select>
           </form>
@@ -112,8 +110,8 @@
                     <th scope="col">longitud</th>
                     <% if (constantes.tipo == 'tabla') { %>
                       <th scope="col">concatenar</th>
+                      <th scope="col">modificar</th>
                     <% } %>
-                    <th scope="col">modificar</th>
                     <th scope="col">campo origen</th>
                     
                   </tr>
@@ -123,7 +121,7 @@
                     <tr>
                       <!--                                            NOMBRE DE LA COLUMNA DE LA TABLA DESTINO -->
                       <!-- ================================================================================================================================ -->
-                      <td><%=elemento.column_name %></td>
+                      <td><%=elemento.campo_destino %></td>
   
   
                       
@@ -171,7 +169,6 @@
                         <% } %>
                       </td>
 
-                      <% } %>
                       
                       <!--                   SELECCIONAR SI SE DECEA QUE EL CAMPO DE TIPO VARCHAR O NVARCHAR SEA MAYUSCOLA O MINUSCULA  -->
                       <!-- ================================================================================================================================ -->       
@@ -200,7 +197,8 @@
                                               <% } %>
                                                   
                                             </td>
-
+                                            
+                      <% } %>
                         <!--                                      SELECCIONAR EL CAMPO DE LA TABLA DE ORIGEN                                                  -->
                         <!-- ================================================================================================================================ -->
                         <td>
@@ -208,7 +206,7 @@
                            
   
                                       <% if (elemento.concatenar === 'si') { %>
-                                          <select required style="margin-bottom: 0px; padding: 3px;" name='campos_a_concatenar' id=<%=elemento.column_name%> multiple>
+                                          <select required style="margin-bottom: 0px; padding: 3px;" name="campos_a_concatenar" id="campos_a_concatenar" multiple>
                                             <% constantes.campos_tabla_oltp.forEach(campo => { %>
                                               <option value=<%=campo%>><%=campo %></option>
                                             <% }) %>
