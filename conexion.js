@@ -1,7 +1,8 @@
 const sql = require('mssql');
 const dbdatos = {} ;
-
 dbdatos.config = {}
+
+dbdatos.lista_etl = [];
 
 dbdatos.getConnection = async () =>{
     const pool = await sql.connect(dbdatos.config)

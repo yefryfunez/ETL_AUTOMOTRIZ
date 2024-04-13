@@ -29,10 +29,11 @@ database_conection.post = async (req, res) => {
     dbdatos.databases.destino = req.body.destino;
     dbdatos.databases.origen = req.body.origen;
     
-    //console.log(req.body); //mostrar informacion de los datos obtenidos
+    console.log(dbdatos.config); //mostrar informacion de los datos obtenidos
     
     try {
         //conexion a la base de datos
+        dbdatos.close();
         const pool = await dbdatos.getConnection();
         
         //obtener los nombres de las tablas de la base de datos origen

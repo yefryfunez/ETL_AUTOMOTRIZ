@@ -5,6 +5,10 @@ const path = require('path');
 const rutas = require('./routes/rutas')
 
 /* ******************************************************************************************************************************* */
+
+ 
+
+
 /* const {leer_archivo, actualizar_etl} = require('./modificar_ETL')
 
 actualizar_etl();
@@ -12,13 +16,27 @@ leer_archivo();
  */
 
 
+/*
+console.log('datos arreglo');
+console.log('************************************')
 
+arreglo.forEach(elemento =>{
+    elemento.full_name = elemento.nombre + '  ' + elemento.apellido;
+    elemento.full_name = elemento.full_name.toUpperCase();
+})
+console.log('datos arreglo');
+console.log('************************************')
+console.log(arreglo);
+ */
 
 
 /* ******************************************************************************************************************************* */
 
-/*  
- let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
+
+
+ 
+/*  let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
+
 console.log(arr); */
 /*
 function concatenarSqlServer(arreglo, modificar,alias){
@@ -79,8 +97,11 @@ app.use('/etlget', rutas);
 app.use('/eltpost', rutas);
 
 
- 
+ app.use((req, res) => {
+    res.render('error',{mensaje: '¡Página no encontrada!'})
+})
 
 
 //configuracion para escuchar en el puerto 3000
-app.listen(app.get('port'), () => {console.log('escuchando en el puerto 30000.')})
+app.listen(app.get('port'), () => {console.log('escuchando en el puerto 3000.')});
+console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')

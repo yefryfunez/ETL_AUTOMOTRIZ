@@ -99,7 +99,7 @@
         <!-- ================================================================================================================================================ -->
         <!--                                      CONSTAINER PARA EL PROCESO DE CONVERSION DE LOS CAMPOS DE LA TABLA SELECCIONADA -->
         <!-- ================================================================================================================================================ -->
-        <% if ((constantes.origen !== 'seleccione una tabla' || constantes.consulta!=='') && constantes.destino !== 'seleccione una tabla') { %>
+        <% if ((constantes.origen !== 'seleccione una tabla' || constantes.consulta!=='') && constantes.destino !== 'seleccione una tabla' && mensaje == '_') { %>
           <div class="container"  style="max-width: 900px">
             <form action="/etlpost" method="post">
               <table class="table">
@@ -154,18 +154,18 @@
                       <% if (constantes.tipo == 'tabla') { %>
                       <td>
                         <% if ((elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') && constantes.tipo != 'consulta') { %>
-                          <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
-                            <option value=<%=elemento.concatenar %> selected><%=elemento.concatenar %></option>
-                            <% if (elemento.concatenar === 'no') { %>
-                              <option value='si'>si</option>
-                            <% } else { %>
-                              <option value='no'>no</option>
-                            <% } %>
-                          </select>
+                                        <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
+                                          <option value=<%=elemento.concatenar %> selected><%=elemento.concatenar %></option>
+                                          <% if (elemento.concatenar === 'no') { %>
+                                            <option value='si'>si</option>
+                                          <% } else { %>
+                                            <option value='no'>no</option>
+                                          <% } %>
+                                        </select>
                         <% } else { %>
-                          <select name="concatenar" id="concatenar" hidden>
-                            <option value='no' selected>no</option>
-                          </select>
+                                        <select name="concatenar" id="concatenar" hidden>
+                                          <option value='no' selected>no</option>
+                                        </select>
                         <% } %>
                       </td>
 
@@ -206,25 +206,59 @@
                            
   
                                       <% if (elemento.concatenar === 'si') { %>
-                                          <select required style="margin-bottom: 0px; padding: 3px;" name="campos_a_concatenar" id="campos_a_concatenar" multiple>
-                                            <% constantes.campos_tabla_oltp.forEach(campo => { %>
-                                              <option value=<%=campo%>><%=campo %></option>
-                                            <% }) %>
-                                          </select>
+<!-- ===================================================  SI EL CAMPO CONCATENAR ES 'SI' SE MUESTRA ESTE SELECT -->
+
+                                                  <select required style="margin-bottom: 0px; padding: 3px;" name="campos_a_concatenar" id="campos_a_concatenar" multiple>
+                                                    <% if (elemento.campo_origen != undefined) { %>
+                                                              <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                    <% if (elemento.campo_origen.indexOf(campo) != -1) { %> 
+                                                                      <option value=<%=campo%> selected><%=campo %></option>    
+                                                                    <% } else { %> 
+                                                                      <option value=<%=campo%>><%=campo %></option>
+                                                                    <% } %>
+                                                              <% }) %>
+                                                    <% } else { %>
+                                                              <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                  <option value=<%=campo%>><%=campo %></option>
+                                                              <% }) %>
+                                                    <% } %>  
+                                                  </select>
                                       <% } else { %>
-                                            <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen" >
-                                              <% constantes.campos_tabla_oltp.forEach(campo => { %>
-                                                <option value=<%=campo%>><%=campo %></option>
-                                              <% }) %>
-                                            </select>
+<!-- ===================================================  SI EL CAMPO CONCATENAR ES 'NO' SE MUESTRA ESTE SELECT -->
+                                                      <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen" >
+                                                        <% if (elemento.campo_origen != undefined) { %>
+                                                                  <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                        <% if (elemento.campo_origen === campo) { %> 
+                                                                        <option value=<%=campo%> selected><%=campo %></option>    
+                                                                        <% } else { %> 
+                                                                          <option value=<%=campo%>><%=campo %></option>
+                                                                        <% } %>
+                                                                  <% }) %>
+                                                        <% } else { %>
+                                                                  <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                      <option value=<%=campo%>><%=campo %></option>
+                                                                  <% }) %>
+                                                        <% } %>  
+                                                      </select>
                                       <% } %>
                             
-                          <% } else { %>                           
-                                      <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen" >
-                                          <% constantes.campos_tabla_oltp.forEach(campo => { %>
-                                          <option value=<%=campo%>><%=campo %></option>
-                                          <% }) %>
-                                      </select>
+                          <% } else { %>
+<!-- ===================================================  SI EL CAMPO ORIGEN NO ES DE TIPO VARCHAR O NVARCHAR SE MUESTRA ESTE SELECT -->                    
+                                        <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen">
+                                            <% if (elemento.campo_origen != undefined) { %>
+                                                      <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                          <% if (elemento.campo_origen === campo) { %> 
+                                                                    <option value=<%=campo%> selected><%=campo %></option>
+                                                          <% } else { %> 
+                                                                    <option value=<%=campo%>><%=campo %></option>
+                                                          <% } %>
+                                                      <% }) %>
+                                            <% } else { %>
+                                                      <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                          <option value=<%=campo%>><%=campo %></option>
+                                                      <% }) %>
+                                            <% } %>  
+                                        </select>
                           <% } %>
                           
                         </td>
@@ -234,12 +268,11 @@
                 </tbody>
               </table>
               <div  style="justify-content: center;">
-                <input  type="submit" class="btn btn-success" value="Guardar ETL">
+                <input  type="submit" class="btn btn-success" name="guardar" value="guardar" onclick="guardar_etl()">
               </div>
             </form>
           </div>
         <% } %>
  
-
 </body>
 </html>
