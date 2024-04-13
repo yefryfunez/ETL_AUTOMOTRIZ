@@ -29,87 +29,29 @@
     "consulta": "select * from [SUCURSAL];"
   },
   {
-    "tipo": "consulta",
-    "origen": "seleccione una tabla",
-    "destino": "[TIEMPO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "tiempoID",
-        "tipo_dato": "date",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "fecha"
-      },
-      {
-        "campo_destino": "año",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "año"
-      },
-      {
-        "campo_destino": "trimestre",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "trimestre"
-      },
-      {
-        "campo_destino": "mes",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "mes"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "fecha",
-      "año",
-      "trimestre",
-      "mes"
-    ],
-    "consulta": "select format(fecha_pago, 'yyyy-MM-dd') as fecha, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
-  },
-  {
     "tipo": "tabla",
-    "origen": "[MARCA]",
-    "destino": "[MARCA]",
+    "origen": "[EMPLEADO]",
+    "destino": "[EMPLEADO]",
     "campos_tabla_olap": [
       {
-        "campo_destino": "marcaID",
+        "campo_destino": "empleadoID",
         "tipo_dato": "nchar",
         "longitud": "5",
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "marcaID"
+        "campo_origen": "empleadoID"
       },
       {
-        "campo_destino": "nombre_marca",
+        "campo_destino": "nombre_empleado",
         "tipo_dato": "nvarchar",
-        "longitud": "30",
+        "longitud": "102",
         "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "nombre_Marca"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "marcaID",
-      "nombre_Marca",
-      "pais_origen"
-    ],
-    "consulta": "select * from [MARCA];"
-  },
-  {
-    "tipo": "tabla",
-    "origen": "[SUCURSAL]",
-    "destino": "[SUCURSAL]",
-    "campos_tabla_olap": [
+        "concatenar": "si",
+        "campo_origen": [
+          "P_nombre",
+          "P_apellido"
+        ]
+      },
       {
         "campo_destino": "sucursalID",
         "tipo_dato": "nchar",
@@ -117,69 +59,23 @@
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "sucursalID"
-      },
-      {
-        "campo_destino": "nombre_sucursal",
-        "tipo_dato": "nvarchar",
-        "longitud": "100",
-        "modificar": "Mayuscula",
-        "concatenar": "no",
-        "campo_origen": "Nom_sucursal"
       }
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "sucursalID",
-      "Nom_sucursal"
+      "empleadoID",
+      "P_nombre",
+      "S_nombre",
+      "P_apellido",
+      "S_apellido",
+      "cargoID",
+      "sueldo",
+      "horas_extras",
+      "fecha_ingreso",
+      "fecha_nacimiento",
+      "sucursalID"
     ],
-    "consulta": "select * from [SUCURSAL];"
-  },
-  {
-    "tipo": "consulta",
-    "origen": "seleccione una tabla",
-    "destino": "[TIEMPO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "tiempoID",
-        "tipo_dato": "date",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "fecha"
-      },
-      {
-        "campo_destino": "año",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "año"
-      },
-      {
-        "campo_destino": "trimestre",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "trimestre"
-      },
-      {
-        "campo_destino": "mes",
-        "tipo_dato": "int",
-        "longitud": "0",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "mes"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "fecha",
-      "año",
-      "trimestre",
-      "mes"
-    ],
-    "consulta": "select format(fecha_pago, 'yyyy-MM-dd') as fecha, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
+    "consulta": "select * from [EMPLEADO];"
   },
   {
     "tipo": "tabla",
@@ -210,37 +106,5 @@
       "pais_origen"
     ],
     "consulta": "select * from [MARCA];"
-  },
-  {
-    "tipo": "consulta",
-    "origen": "seleccione una tabla",
-    "destino": "[REPUESTO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "repuestoID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "RepuestoID"
-      },
-      {
-        "campo_destino": "descripcion_repuesto",
-        "tipo_dato": "nvarchar",
-        "longitud": "100",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "Descripcion_rep"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "RepuestoID",
-      "Descripcion_rep",
-      "costo_adquisicion",
-      "costo_venta",
-      "cantidad"
-    ],
-    "consulta": "select  * from repuesto;"
   }
 ]

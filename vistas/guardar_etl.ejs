@@ -1,26 +1,13 @@
 
 <%-include('plantillas/cabecera', {titulo: 'credenciales'})%>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+<%-include('plantillas/navbar') %>
 
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Credenciales</a>
-          </li>
-
-        </ul>
-
-      </div>
-    </div>
-  </nav>
 
 
         <!-- ================================================================================================================================================ -->
         <!--                                       CONSTAINER PARA EL PROCESO DE CONVERSION DE LOS CAMPOS DE LA TABLA SELECCIONADA -->
         <!-- ================================================================================================================================================ -->       
-        <div class="container">
+        <div class="container" >
 
           <!--                                         SELECT PARA SELECCIONAR TABLA O CUNSOLTA PARA LA TABLA DE ORIGEN -->
           <!-- ================================================================================================================================================ -->     
@@ -74,7 +61,6 @@
             </div>
         <% } %>
         </div>
-
 
 
 
@@ -268,11 +254,19 @@
                 </tbody>
               </table>
               <div  style="justify-content: center;">
-                <input  type="submit" class="btn btn-success" name="guardar" value="guardar" onclick="guardar_etl()">
+                <input  type="submit" class="btn btn-success" name="guardar" value="guardar">
               </div>
             </form>
           </div>
         <% } %>
  
+
+
+
+
+
+
+
+
 </body>
 </html>

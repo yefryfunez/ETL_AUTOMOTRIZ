@@ -6,58 +6,13 @@ const rutas = require('./routes/rutas')
 
 /* ******************************************************************************************************************************* */
 
- 
-
-
-/* const {leer_archivo, actualizar_etl} = require('./modificar_ETL')
-
-actualizar_etl();
-leer_archivo();
- */
-
-
-/*
-console.log('datos arreglo');
-console.log('************************************')
-
-arreglo.forEach(elemento =>{
-    elemento.full_name = elemento.nombre + '  ' + elemento.apellido;
-    elemento.full_name = elemento.full_name.toUpperCase();
-})
-console.log('datos arreglo');
-console.log('************************************')
-console.log(arreglo);
- */
+let arr = ['jaja', 'jeje', 'jiji']
+arr.splice(1,1,'jojo')
+console.log(arr)
 
 
 /* ******************************************************************************************************************************* */
 
-
-
- 
-/*  let arr = ['p_nombre', 's_nombre', 'p_apellido', 's_apellido'];
-
-console.log(arr); */
-/*
-function concatenarSqlServer(arreglo, modificar,alias){
-  let campos = '';
-  campos = arreglo.join(',\'  \',');
-  campos = 'concat('+campos+')';
-  if(modificar === 'Mayuscula') campos = 'upper('+campos+')';
-  if(modificar === 'Minuscula') campos = 'lower('+campos+')';
-  campos = campos + ' as ' + alias;
-  return campos;
-}
-
-console.log('campos concatenados ????????????????????????????????????????????')
-console.log(concatenarSqlServer(arr, 'Minuscula', 'nombre')) */
-
-/* arr.splice(2,0,'jaja')
-console.log(arr); */
-/*arr = arr.join(',\' \',')
-arr = ' concat('+arr+') '
-console.log(arr);
- */
 
 const objeto = {
     nombre: 'Juan',
@@ -95,6 +50,8 @@ app.use('/guardar_credenciales', rutas);
  
 app.use('/etlget', rutas);
 app.use('/eltpost', rutas);
+app.use('/etls', rutas);
+app.use('/actualizar_etl', rutas);
 
 
  app.use((req, res) => {
@@ -104,4 +61,4 @@ app.use('/eltpost', rutas);
 
 //configuracion para escuchar en el puerto 3000
 app.listen(app.get('port'), () => {console.log('escuchando en el puerto 3000.')});
-console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')

@@ -1,0 +1,303 @@
+
+<%-include('plantillas/cabecera', {titulo: 'credenciales'})%>
+
+<%-include ('plantillas/navbar') %>
+
+
+<div class="container"> 
+    <form action="/actualizar_etl" method="post">
+      <input type="submit" name="Eliminar" value="Eliminar">
+      <input type="submit" name="ejecutar" value="ejecutar">
+    </form>
+
+    <form action="/actualizar_etl" method="post">    
+      
+          <table class="table table-borderless">
+            <thead>
+              <tr><h4>Lista de ETLs</h4></tr>
+              <hr>
+            </thead>
+            <tbody>
+              <% dbdatos.lista_etl.forEach(elemento => { %>
+                  <tr>
+                        <td>
+                          <button name="etl" type="submit" onclick="this.form.submit()" value="<%=elemento.destino%>"><%=elemento.destino%></button>
+                        </td>
+                  </tr>
+              <% }) %>
+            </tbody>
+          </table>
+
+    </form>
+</div>
+
+
+<% if (constantes.i > -1) { %>
+ 
+
+
+
+        <!-- ================================================================================================================================================ -->
+        <!--                                       CONSTAINER PARA EL PROCESO DE CONVERSION DE LOS CAMPOS DE LA TABLA SELECCIONADA -->
+        <!-- ================================================================================================================================================ -->       
+        <div class="container">
+
+          <!--                                         SELECT PARA SELECCIONAR TABLA O CUNSOLTA PARA LA TABLA DE ORIGEN -->
+          <!-- ================================================================================================================================================ -->     
+          <form action="/actualizar_etl" method="post">
+            <select name="tipo" id="tipo" required onchange="this.form.submit()" >
+              <option value="<%=constantes.tipo%>" selected ><%=constantes.tipo%></option>
+              <% if (constantes.tipo === 'tabla') { %>
+                    <option value="consulta">Consulta</option>
+              <% } else { %>
+                    <option value="tabla">Tabla</option>
+              <% } %>
+            </select>
+            <hr><hr>
+            
+            
+            <!--                                                    EN CASO DE QUE ELIJA LA OPCION TABLA    -->
+            <!-- ================================================================================================================================================ -->     
+                <% if (constantes.tipo === 'tabla') { %>
+                          <h4>seleccione la tabla de origen</h4>
+                          <select name="origen" id='origen' required >
+                              <option value="<%=constantes.origen%>" selected disabled><%=constantes.origen%></option>
+                            <% dbdatos.tablas_origen.forEach(elemento => { %>
+                              <option value="<%=elemento.table_name %>"><%=elemento.table_name %></option>
+                            <% }) %>
+                          </select>
+                <% } else { %>
+                  
+
+                  <!--                                              EN CASO DE QUE ELIJA LA OPCION CONSULTA    -->
+                  <!-- ================================================================================================================================================ -->     
+                          <h4>Inserte la consulta</h4>
+                          <input name="consulta" id="consulta" type="text" placeholder="Ingrese la consulta a la base de datos oltp." value = "<%=constantes.consulta%>">     
+                <% } %>
+                      
+  
+                      
+                  <!--                                    SELECT PARA SELECCIONAR TABLA O CUNSOLTA PARA LA TABLA DE DESTINO  -->
+                  <!-- ================================================================================================================================================ -->     
+            <hr><hr>
+            <h4>seleccione la tabla de destino</h4>
+                <select name="destino" id="destino" required onchange="this.form.submit()">
+                  <option value="<%=constantes.destino%>" selected disabled><%=constantes.destino%></option>
+                  <% dbdatos.tablas_destino.forEach(elemento => { %>
+                    <option value="<%=elemento.table_name %>"><%=elemento.table_name %></option>
+                  <% }) %>
+                </select>
+          </form>
+          <% if (mensaje != '_') { %>
+            <div>
+                <%= mensaje %>
+            </div>
+        <% } %>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        <!-- ================================================================================================================================================ -->
+        <!--                                      CONSTAINER PARA EL PROCESO DE CONVERSION DE LOS CAMPOS DE LA TABLA SELECCIONADA -->
+        <!-- ================================================================================================================================================ -->
+        <% if ((constantes.origen !== 'seleccione una tabla' || constantes.consulta!=='') && constantes.destino !== 'seleccione una tabla' && mensaje == '_') { %>
+          <div class="container"  style="max-width: 900px">
+            <form action="/actualizar_etl" method="post">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">campo destino</th>
+                    <th scope="col">tipo de dato</th>
+                    <th scope="col">longitud</th>
+                    <% if (constantes.tipo == 'tabla') { %>
+                      <th scope="col">concatenar</th>
+                      <th scope="col">modificar</th>
+                    <% } %>
+                    <th scope="col">campo origen</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <% constantes.campos_tabla_olap.forEach(elemento => { %>
+                    <tr>
+                      <!--                                            NOMBRE DE LA COLUMNA DE LA TABLA DESTINO -->
+                      <!-- ================================================================================================================================ -->
+                      <td><%=elemento.campo_destino %></td>
+  
+  
+                      
+                      <!--                                                  SELECCIONAR EL TIPO DE DATO -->
+                      <!-- ================================================================================================================================ -->
+                      <td>
+                        <select style="margin-bottom: 0px; padding: 3px;" name="tipo_dato" id="tipo_dato" >
+                          <option  selected value=<%=elemento.tipo_dato %>><%=elemento.tipo_dato %></option>
+                          <% dbdatos.tipo_de_dato.forEach(elemento1 => { %>
+                            <option value=<%=elemento1.tipo_dato %>><%=elemento1.tipo_dato %></option>
+                          <% }) %>
+                        </select>
+                      </td>
+    
+  
+                      <!--                                     INSERTAR LA LONGITUD EN CASO DE QUE SEA VARCHAR O NVARCHAR -->
+                      <!-- ================================================================================================================================ -->
+                      <td>
+                        <% if (elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar' || elemento.tipo_dato == 'char' || elemento.tipo_dato == 'nchar') { %>
+                          <input style="width: 60px; margin-bottom: 0px; padding: 3px;" type="text" name="longitud" id="longitud" value=<%=elemento.longitud %>>
+                        <% } else { %>
+                           <input style="width: 30px;" name="longitud" id="longitud" type="text" value=0 hidden>
+                        <% } %>
+                      </td>
+  
+
+  
+                      <!--                            SELECCIONAR SI SE DECEA CONCATENAR VARIOS CAMPOS DE TIPO VARCHAR O NVARCHAR  -->
+                      <!-- ================================================================================================================================ -->
+                      <% if (constantes.tipo == 'tabla') { %>
+                      <td>
+                        <% if ((elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') && constantes.tipo != 'consulta') { %>
+                                        <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
+                                          <option value=<%=elemento.concatenar %> selected><%=elemento.concatenar %></option>
+                                          <% if (elemento.concatenar === 'no') { %>
+                                            <option value='si'>si</option>
+                                          <% } else { %>
+                                            <option value='no'>no</option>
+                                          <% } %>
+                                        </select>
+                        <% } else { %>
+                                        <select name="concatenar" id="concatenar" hidden>
+                                          <option value='no' selected>no</option>
+                                        </select>
+                        <% } %>
+                      </td>
+
+                      
+                      <!--                   SELECCIONAR SI SE DECEA QUE EL CAMPO DE TIPO VARCHAR O NVARCHAR SEA MAYUSCOLA O MINUSCULA  -->
+                      <!-- ================================================================================================================================ -->       
+                      
+                                         
+                                            <td>
+                                              <% if (elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') { %>
+                                                
+                                                <select style="margin-bottom: 0px; padding: 3px;" name="modificar" id="modificar" >
+                                                  <option value=<%=elemento.modificar%> selected><%=elemento.modificar%></option>
+                                                  <% if (elemento.modificar === 'Normal') { %>
+                                                          <option value="Mayuscula">Mayuscula</option>
+                                                          <option value="Minuscula">Minuscula</option>
+                                                  <% } else if(elemento.modificar === 'Mayuscula') { %>
+                                                          <option value="Normal">Normal</option>
+                                                          <option value="Minuscula">Minuscula</option>
+                                                  <% } else { %>
+                                                          <option value="Normal">Normal</option>
+                                                          <option value="Mayuscula">Mayuscula</option>
+                                                  <% } %>
+                                                </select>
+                                              <% } else { %>
+                                                  <select name="modificar" id="modificar" hidden>
+                                                    <option value='Normal' selected>no</option>
+                                                  </select>
+                                              <% } %>
+                                                  
+                                            </td>
+                                            
+                      <% } %>
+                        <!--                                      SELECCIONAR EL CAMPO DE LA TABLA DE ORIGEN                                                  -->
+                        <!-- ================================================================================================================================ -->
+                        <td>
+                          <% if (elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') { %>
+                           
+  
+                                      <% if (elemento.concatenar === 'si') { %>
+<!-- ===================================================  SI EL CAMPO CONCATENAR ES 'SI' SE MUESTRA ESTE SELECT -->
+
+                                                  <select required style="margin-bottom: 0px; padding: 3px;" name="campos_a_concatenar" id="campos_a_concatenar" multiple>
+                                                    <% if (elemento.campo_origen != undefined) { %>
+                                                              <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                    <% if (elemento.campo_origen.indexOf(campo) != -1) { %> 
+                                                                      <option value=<%=campo%> selected><%=campo %></option>    
+                                                                    <% } else { %> 
+                                                                      <option value=<%=campo%>><%=campo %></option>
+                                                                    <% } %>
+                                                              <% }) %>
+                                                    <% } else { %>
+                                                              <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                  <option value=<%=campo%>><%=campo %></option>
+                                                              <% }) %>
+                                                    <% } %>  
+                                                  </select>
+                                      <% } else { %>
+<!-- ===================================================  SI EL CAMPO CONCATENAR ES 'NO' SE MUESTRA ESTE SELECT -->
+                                                      <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen" >
+                                                        <% if (elemento.campo_origen != undefined) { %>
+                                                                  <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                        <% if (elemento.campo_origen === campo) { %> 
+                                                                        <option value=<%=campo%> selected><%=campo %></option>    
+                                                                        <% } else { %> 
+                                                                          <option value=<%=campo%>><%=campo %></option>
+                                                                        <% } %>
+                                                                  <% }) %>
+                                                        <% } else { %>
+                                                                  <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                                      <option value=<%=campo%>><%=campo %></option>
+                                                                  <% }) %>
+                                                        <% } %>  
+                                                      </select>
+                                      <% } %>
+                            
+                          <% } else { %>
+<!-- ===================================================  SI EL CAMPO ORIGEN NO ES DE TIPO VARCHAR O NVARCHAR SE MUESTRA ESTE SELECT -->                    
+                                        <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen">
+                                            <% if (elemento.campo_origen != undefined) { %>
+                                                      <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                          <% if (elemento.campo_origen === campo) { %> 
+                                                                    <option value=<%=campo%> selected><%=campo %></option>
+                                                          <% } else { %> 
+                                                                    <option value=<%=campo%>><%=campo %></option>
+                                                          <% } %>
+                                                      <% }) %>
+                                            <% } else { %>
+                                                      <% constantes.campos_tabla_oltp.forEach(campo => { %>
+                                                          <option value=<%=campo%>><%=campo %></option>
+                                                      <% }) %>
+                                            <% } %>  
+                                        </select>
+                          <% } %>
+                          
+                        </td>
+                    </tr>
+                  <% }) %>
+
+                </tbody>
+              </table>
+              <div  style="justify-content: center;">
+                <input  type="submit" class="btn btn-success" name="actualizar" value="actualizar" >
+              </div>
+            </form>
+          </div>
+        <% } %>
+ 
+
+
+
+
+<% } %>
+</body>
+</html>

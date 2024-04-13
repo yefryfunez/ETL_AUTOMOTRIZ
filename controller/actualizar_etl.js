@@ -1,5 +1,5 @@
 const dbdatos = require('../conexion');
-const etl = {};
+const actualizar_etl = {};
 const fs = require('fs');
 const path = require('path');
 
@@ -24,11 +24,11 @@ function leer_etl(){
             arreg.forEach(elemento => {
                 dbdatos.lista_etl.push(elemento)
             })
-            //console.log(arreg);
+
+            console.log(dbdatos.lista_etl);
          } catch (error) {
             const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
             guardar_etl(lista_etl_json);
-
          }
     })
 }
@@ -42,6 +42,7 @@ const constantes = {
     campos_tabla_olap: [],
     campos_tabla_oltp: [],
     consulta: '',
+    i: -1,
 }
 let mensaje = '_';
 
@@ -55,6 +56,7 @@ function  iniciar () {
     constantes.campos_tabla_olap = [];
     constantes.campos_tabla_oltp = [];
     constantes.consulta = '';
+    constantes.i = -1;
 }
 
 
@@ -69,11 +71,11 @@ function  iniciar () {
 
 
 /*  ======================================================== METODO GET ===============================================================*/
-etl.get = (req, res) => {
+actualizar_etl.get = (req, res) => {
     console.log('lectura del etl')
-    leer_etl();
+    if(dbdatos.lista_etl.length === 0) leer_etl();
     iniciar();
-    res.render('etl',{
+    res.render('actualizar_etl',{
         dbdatos,
         mensaje,
         constantes
@@ -85,7 +87,12 @@ etl.get = (req, res) => {
 
 
 
-
+function buscarETL(origen){
+    for(let i=0; i<dbdatos.lista_etl.length; i++){
+        if(dbdatos.lista_etl[i].origen === origen) return i;
+    }
+    console.log(i);
+}
 
 
 
@@ -94,9 +101,21 @@ etl.get = (req, res) => {
 /* ############################################################################################################################################################# */
 /*  ==================================================================== METODO POST ===========================================================================*/
 /* ############################################################################################################################################################# */
-etl.post = async (req, res) => {
+actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
-
+    console.log('********************************************** respuesta ***************************************************')
+    console.log(respuesta)
+    
+    if(respuesta.etl != undefined){
+        constantes.i = buscarETL(respuesta.etl);
+        constantes.tipo = dbdatos.lista_etl[constantes.i].tipo;
+        constantes.origen = dbdatos.lista_etl[constantes.i].origen;
+        constantes.destino = dbdatos.lista_etl[constantes.i].destino;
+        constantes.campos_tabla_olap = dbdatos.lista_etl[constantes.i].campos_tabla_olap;
+        constantes.campos_tabla_oltp = dbdatos.lista_etl[constantes.i].campos_tabla_oltp;
+        constantes.consulta = dbdatos.lista_etl[constantes.i].consulta;
+    }
+    console.log(constantes)
 
     //UNA VEZ SELECCIONADA LA TABLA O CONSULTA PARA OBTENER LOS DATOS DE LA BASE DE DATOS ORIGEN
     /* *************************************************************************************************************************************************** */
@@ -151,6 +170,7 @@ etl.post = async (req, res) => {
 
 
                         try {
+    if(respuesta.etl === undefined){
                             const pool = await dbdatos.getConnection(); //CONEXION A LA BASE DE DATOS
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
@@ -204,27 +224,24 @@ etl.post = async (req, res) => {
                                     //console.log(constantes.campos_tabla_olap);
                                 }
                             }
-                            
+    }
 
 
                             /* =========================== GUARDAR EL ETL PARA LA DIMENSION ESPECIFICADA ============================== */
-                            if(respuesta.guardar != undefined ){
-                                if(respuesta.guardar === 'guardar'){
-                                    dbdatos.lista_etl.push(
-                                        {
-                                            tipo: constantes.tipo,
-                                            origen: constantes.origen,
-                                            destino: constantes.destino,
-                                            campos_tabla_olap: constantes.campos_tabla_olap,
-                                            campos_tabla_oltp: constantes.campos_tabla_oltp,
-                                            consulta: constantes.consulta,
-                                        }
+                            if(respuesta.actualizar != undefined ){
+                                if(respuesta.actualizar === 'actualizar'){
 
-                                    )
+                                    dbdatos.lista_etl[constantes.i].tipo = constantes.tipo;
+                                    dbdatos.lista_etl[constantes.i].origen =  constantes.origen;
+                                    dbdatos.lista_etl[constantes.i].destino = constantes.destino;
+                                    dbdatos.lista_etl[constantes.i].campos_tabla_olap = constantes.campos_tabla_olap;
+                                    dbdatos.lista_etl[constantes.i].campos_tabla_oltp = constantes.campos_tabla_oltp;
+                                    dbdatos.lista_etl[constantes.i].consulta = constantes.consulta;
+
                                     const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
                                     guardar_etl(lista_etl_json)
                                 }
-                                console.log(arreg);
+
                                 iniciar();
                             }
 
@@ -249,7 +266,7 @@ etl.post = async (req, res) => {
     console.log('respuesta:')
    console.log(respuesta); */
    
-    res.render('etl',{
+    res.render('actualizar_etl',{
         dbdatos,
         mensaje,
         constantes
@@ -260,4 +277,4 @@ etl.post = async (req, res) => {
 
 
 
-module.exports = etl;
+module.exports = actualizar_etl;
