@@ -90,8 +90,10 @@ ejecutar_etl.post = async (req, res) => {
                             let columnas = '';
                             let alias = '';
                             elemento.campos_tabla_olap.forEach( campo => {
-                                columnas += campo.campo_destino + ', '
-                                alias += '@' + campo.campo_destino + ', '
+                                if(campo.campo_origen != 'ninguno') {
+                                    columnas += campo.campo_destino + ', '
+                                    alias += '@' + campo.campo_destino + ', '
+                                }
                             })
                             columnas = columnas.substring(0,columnas.length-2)
                             alias = alias.substring(0,alias.length-2)
@@ -110,6 +112,7 @@ ejecutar_etl.post = async (req, res) => {
                                 let icampos = 0;
                                 const request = pool.request();
                                         for(let prop in objeto){
+                                            if(elemento.campos_tabla_olap[icampos].campo_origen === 'ninguno') icampos++;
                                             let data = '';
                                             let tipo_dato = '';
                                             switch(elemento.campos_tabla_olap[icampos].tipo_dato){
@@ -149,6 +152,7 @@ ejecutar_etl.post = async (req, res) => {
                                             if(typeof objeto[prop] === 'string') data = objeto[prop].trim();
                                             else data = parseFloat(objeto[prop])+'';
                                             
+
                                             if(elemento.campos_tabla_olap[icampos].modificar === 'Mayuscula'){
                                                 data = data.toUpperCase();
                                             } else if(elemento.campos_tabla_olap[icampos].modificar === 'Minuscula'){

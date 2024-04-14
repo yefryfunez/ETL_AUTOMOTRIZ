@@ -29,6 +29,36 @@
     "consulta": "select sucursalID, Nom_sucursal from [SUCURSAL];"
   },
   {
+    "tipo": "tabla",
+    "origen": "[MARCA]",
+    "destino": "[MARCA]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "marcaID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "marcaID"
+      },
+      {
+        "campo_destino": "nombre_marca",
+        "tipo_dato": "nvarchar",
+        "longitud": "30",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "nombre_Marca"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "marcaID",
+      "nombre_Marca",
+      "pais_origen"
+    ],
+    "consulta": "select marcaID, nombre_Marca from [MARCA];"
+  },
+  {
     "tipo": "consulta",
     "origen": "seleccione una tabla",
     "destino": "[EMPLEADO]",
@@ -65,5 +95,186 @@
       "sucursalID"
     ],
     "consulta": "select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;"
+  },
+  {
+    "tipo": "tabla",
+    "origen": "[MODELO]",
+    "destino": "[MODELO]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "modeloID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "modeloID"
+      },
+      {
+        "campo_destino": "nombre_modelo",
+        "tipo_dato": "nvarchar",
+        "longitud": "150",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "nombre_Modelo"
+      },
+      {
+        "campo_destino": "marcaID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "marcaID"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "modeloID",
+      "nombre_Modelo",
+      "marcaID"
+    ],
+    "consulta": "select modeloID, nombre_Modelo, marcaID from [MODELO];"
+  },
+  {
+    "tipo": "tabla",
+    "origen": "[REPUESTO]",
+    "destino": "[REPUESTO]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "repuestoID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "RepuestoID"
+      },
+      {
+        "campo_destino": "descripcion_repuesto",
+        "tipo_dato": "nvarchar",
+        "longitud": "100",
+        "modificar": "Mayuscula",
+        "concatenar": "no",
+        "campo_origen": "Descripcion_rep"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "RepuestoID",
+      "Descripcion_rep",
+      "costo_adquisicion",
+      "costo_venta",
+      "cantidad"
+    ],
+    "consulta": "select RepuestoID, Descripcion_rep from [REPUESTO];"
+  },
+  {
+    "tipo": "consulta",
+    "origen": "seleccione una tabla",
+    "destino": "[TIEMPO]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "tiempoID",
+        "tipo_dato": "date",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "fecha"
+      },
+      {
+        "campo_destino": "año",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "año"
+      },
+      {
+        "campo_destino": "trimestre",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "trimestre"
+      },
+      {
+        "campo_destino": "mes",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "mes"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "fecha",
+      "año",
+      "trimestre",
+      "mes"
+    ],
+    "consulta": "select format(fecha_pago, 'yyyy-MM-dd') as fecha, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
+  },
+  {
+    "tipo": "consulta",
+    "origen": "seleccione una tabla",
+    "destino": "[HECHOS_REPUESTOS]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "codigo",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "ninguno"
+      },
+      {
+        "campo_destino": "repuestoID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "REPUESTOID"
+      },
+      {
+        "campo_destino": "empleadoID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "EMPLEADOID"
+      },
+      {
+        "campo_destino": "modeloID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "MODELOID"
+      },
+      {
+        "campo_destino": "tiempoID",
+        "tipo_dato": "date",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "fecha_pago"
+      },
+      {
+        "campo_destino": "total_repuesto",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "TOTAL_REPUESTOS"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "REPUESTOID",
+      "EMPLEADOID",
+      "MODELOID",
+      "fecha_pago",
+      "TOTAL_REPUESTOS"
+    ],
+    "consulta": "SELECT REPUESTOID, E.EMPLEADOID, v.MODELOID, format(fecha_pago, 'yyyy-MM-dd') fecha_pago, \tSUM(TOTAL_REPUESTO*(1-DESCUENTO)*1.12) TOTAL_REPUESTOS FROM ORDEN_SERVICIO OS INNER JOIN DETALLE_REPUESTO DR ON DR.ordenID = OS.OrdenID  \tINNER JOIN FACTURA F ON F.ordenID = OS.OrdenID INNER JOIN EMPLEADO E ON E.empleadoID =OS.empleadoID \tINNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;"
   }
 ]
