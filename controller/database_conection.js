@@ -4,12 +4,9 @@ let mensaje = '_';
 
 
 database_conection.get = (req, res) => {
-    
-    //dbdatos.iniciar();
     res.render('database_conection',{
         dbdatos : dbdatos,
-        mensaje,
-        tipo: 'tabla'
+        mensaje
     });
 }
 
@@ -29,7 +26,6 @@ database_conection.post = async (req, res) => {
     dbdatos.databases.destino = req.body.destino;
     dbdatos.databases.origen = req.body.origen;
     
-    console.log(dbdatos.config); //mostrar informacion de los datos obtenidos
     
     try {
         //conexion a la base de datos

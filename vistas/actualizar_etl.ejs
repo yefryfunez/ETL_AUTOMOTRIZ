@@ -1,14 +1,34 @@
 
-<%-include('plantillas/cabecera', {titulo: 'credenciales'})%>
+<%-include('plantillas/cabecera', {titulo: 'actualizar_etl'})%>
 
 <%-include ('plantillas/navbar') %>
 
 
-<div class="container"> 
-    <form action="/actualizar_etl" method="post">
-      <input type="submit" name="Eliminar" value="Eliminar">
-      <input type="submit" name="ejecutar" value="ejecutar">
-    </form>
+<div class="container" style="max-width: 450px"> 
+  <table class="table">
+    <tbody>
+      <tr>
+          <td>
+            <form action="/actualizar_etl" method="post">
+              <input style="margin: 0px;" type="submit" name="Eliminar" value="Eliminar">
+            </form>
+          </td>
+          <td>
+            <form action="/ejecutar_etl" method="get">
+              <input style="margin: 0px;" type="submit" name="ejecutar" value="ejecutar">
+            </form>
+          </td>
+          <td>
+            <form action="/etlget" method="get">
+              <input  style="margin: 0px;" type="submit"  value="agregar ETL">
+            </form>
+          </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+    
 
     <form action="/actualizar_etl" method="post">    
       
@@ -172,24 +192,24 @@
                       <!--                            SELECCIONAR SI SE DECEA CONCATENAR VARIOS CAMPOS DE TIPO VARCHAR O NVARCHAR  -->
                       <!-- ================================================================================================================================ -->
                       <% if (constantes.tipo == 'tabla') { %>
-                      <td>
-                        <% if ((elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') && constantes.tipo != 'consulta') { %>
-                                        <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
-                                          <option value=<%=elemento.concatenar %> selected><%=elemento.concatenar %></option>
-                                          <% if (elemento.concatenar === 'no') { %>
-                                            <option value='si'>si</option>
-                                          <% } else { %>
-                                            <option value='no'>no</option>
-                                          <% } %>
-                                        </select>
-                        <% } else { %>
-                                        <select name="concatenar" id="concatenar" hidden>
-                                          <option value='no' selected>no</option>
-                                        </select>
-                        <% } %>
-                      </td>
+                              <td>
+                                <% if ((elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') && constantes.tipo != 'consulta') { %>
+                                                <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
+                                                  <option value=<%=elemento.concatenar %> selected><%=elemento.concatenar %></option>
+                                                  <% if (elemento.concatenar === 'no') { %>
+                                                    <option value='si'>si</option>
+                                                  <% } else { %>
+                                                    <option value='no'>no</option>
+                                                  <% } %>
+                                                </select>
+                                <% } else { %>
+                                                <select name="concatenar" id="concatenar" hidden>
+                                                  <option value='no' selected>no</option>
+                                                </select>
+                                <% } %>
+                              </td>
 
-                      
+                      <% } %>                      
                       <!--                   SELECCIONAR SI SE DECEA QUE EL CAMPO DE TIPO VARCHAR O NVARCHAR SEA MAYUSCOLA O MINUSCULA  -->
                       <!-- ================================================================================================================================ -->       
                       
@@ -218,7 +238,7 @@
                                                   
                                             </td>
                                             
-                      <% } %>
+
                         <!--                                      SELECCIONAR EL CAMPO DE LA TABLA DE ORIGEN                                                  -->
                         <!-- ================================================================================================================================ -->
                         <td>

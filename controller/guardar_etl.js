@@ -56,6 +56,7 @@ function  iniciar () {
     constantes.campos_tabla_olap = [];
     constantes.campos_tabla_oltp = [];
     constantes.consulta = '';
+    mensaje = '_'
 }
 
 
@@ -71,7 +72,7 @@ function  iniciar () {
 
 /*  ======================================================== METODO GET ===============================================================*/
 etl.get = (req, res) => {
-    console.log('lectura del etl')
+    
     if(dbdatos.lista_etl.length === 0) leer_etl();
     iniciar();
     res.render('guardar_etl',{
@@ -130,7 +131,7 @@ etl.post = async (req, res) => {
     /* *************************************************************************************************************************************************** */
     if(respuesta.destino != undefined)  {
             constantes.destino = '[' + respuesta.destino + ']' 
-
+            
             //validacion para verificar que no exista un etl para la tabla destino seleccionada
             dbdatos.lista_etl.forEach(elemento => {
                         if(elemento.destino === constantes.destino){
@@ -172,6 +173,7 @@ etl.post = async (req, res) => {
                                         /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, CUANDO SE SELECCIONA TABLA */
                                         if(respuesta.concatenar != undefined) {
                                                 let concat = 0;
+                                                let campos = '';
                                                 for(let i=0; i<constantes.campos_tabla_olap.length; i++){
                                                     constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
                                                     constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
@@ -182,12 +184,21 @@ etl.post = async (req, res) => {
                                                         if(constantes.campos_tabla_olap[i].concatenar === 'si'){
                                                             concat -= 1;
                                                             constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
+                                                            if(Array.isArray(respuesta.campos_a_concatenar))
+                                                                campos += 'concat(' + constantes.campos_tabla_olap[i].campo_origen.join(' ,\'  \', ') + ') as ' + constantes.campos_tabla_olap[i].campo_destino + ', ';
                                                         } else {
-                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                            if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                            else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
+
+                                                            if(respuesta.campo_origen[concat] != 'ninguno')
+                                                                campos += respuesta.campo_origen[concat] + ', '; 
                                                         }
                                                     }
                                                     concat += 1;
                                                 }
+                                                 campos = campos.slice(0,campos.length-2)
+                                                if(campos != '')
+                                                    constantes.consulta = `select ${campos} from ${constantes.origen};`
                                         }
                             }
                             
@@ -200,9 +211,9 @@ etl.post = async (req, res) => {
                                     for(let i=0; i<constantes.campos_tabla_olap.length; i++){
                                                         constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
                                                         constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                        constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
                                                         constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
                                     }
-                                    //console.log(constantes.campos_tabla_olap);
                                 }
                             }
                             
@@ -211,6 +222,7 @@ etl.post = async (req, res) => {
                             /* =========================== GUARDAR EL ETL PARA LA DIMENSION ESPECIFICADA ============================== */
                             if(respuesta.guardar != undefined ){
                                 if(respuesta.guardar === 'guardar'){
+
                                     dbdatos.lista_etl.push(
                                         {
                                             tipo: constantes.tipo,
@@ -241,14 +253,7 @@ etl.post = async (req, res) => {
     }/* *************************************************************************************************************************************************************************** */
 
 
-    
 
- /*
-    console.log('constantes:')
-    console.log(constantes) 
-
-    console.log('respuesta:')
-   console.log(respuesta); */
    
     res.render('guardar_etl',{
         dbdatos,

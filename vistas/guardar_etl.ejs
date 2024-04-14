@@ -1,5 +1,5 @@
 
-<%-include('plantillas/cabecera', {titulo: 'credenciales'})%>
+<%-include('plantillas/cabecera', {titulo: 'agregar etl'})%>
 <%-include('plantillas/navbar') %>
 
 
@@ -137,7 +137,7 @@
   
                       <!--                            SELECCIONAR SI SE DECEA CONCATENAR VARIOS CAMPOS DE TIPO VARCHAR O NVARCHAR  -->
                       <!-- ================================================================================================================================ -->
-                      <% if (constantes.tipo == 'tabla') { %>
+            <% if (constantes.tipo == 'tabla') { %>
                       <td>
                         <% if ((elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar') && constantes.tipo != 'consulta') { %>
                                         <select name="concatenar" id="concatenar" style="margin-bottom: 0px; padding: 3px;" onchange="this.form.submit()" >
@@ -155,7 +155,7 @@
                         <% } %>
                       </td>
 
-                      
+            <% } %>                      
                       <!--                   SELECCIONAR SI SE DECEA QUE EL CAMPO DE TIPO VARCHAR O NVARCHAR SEA MAYUSCOLA O MINUSCULA  -->
                       <!-- ================================================================================================================================ -->       
                       
@@ -184,7 +184,7 @@
                                                   
                                             </td>
                                             
-                      <% } %>
+
                         <!--                                      SELECCIONAR EL CAMPO DE LA TABLA DE ORIGEN                                                  -->
                         <!-- ================================================================================================================================ -->
                         <td>
@@ -231,6 +231,7 @@
                           <% } else { %>
 <!-- ===================================================  SI EL CAMPO ORIGEN NO ES DE TIPO VARCHAR O NVARCHAR SE MUESTRA ESTE SELECT -->                    
                                         <select required style="margin-bottom: 0px; padding: 3px;" name="campo_origen" id="campo_origen">
+                                          
                                             <% if (elemento.campo_origen != undefined) { %>
                                                       <% constantes.campos_tabla_oltp.forEach(campo => { %>
                                                           <% if (elemento.campo_origen === campo) { %> 

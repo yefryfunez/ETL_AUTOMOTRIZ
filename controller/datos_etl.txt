@@ -16,7 +16,7 @@
         "campo_destino": "nombre_sucursal",
         "tipo_dato": "nvarchar",
         "longitud": "100",
-        "modificar": "Mayuscula",
+        "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "Nom_sucursal"
       }
@@ -26,11 +26,11 @@
       "sucursalID",
       "Nom_sucursal"
     ],
-    "consulta": "select * from [SUCURSAL];"
+    "consulta": "select sucursalID, Nom_sucursal from [SUCURSAL];"
   },
   {
-    "tipo": "tabla",
-    "origen": "[EMPLEADO]",
+    "tipo": "consulta",
+    "origen": "seleccione una tabla",
     "destino": "[EMPLEADO]",
     "campos_tabla_olap": [
       {
@@ -39,18 +39,15 @@
         "longitud": "5",
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "empleadoID"
+        "campo_origen": "empleadoId"
       },
       {
         "campo_destino": "nombre_empleado",
         "tipo_dato": "nvarchar",
         "longitud": "102",
-        "modificar": "Normal",
-        "concatenar": "si",
-        "campo_origen": [
-          "P_nombre",
-          "P_apellido"
-        ]
+        "modificar": "Mayuscula",
+        "concatenar": "no",
+        "campo_origen": "NOMBRE_EMPLEADO"
       },
       {
         "campo_destino": "sucursalID",
@@ -63,48 +60,10 @@
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "empleadoID",
-      "P_nombre",
-      "S_nombre",
-      "P_apellido",
-      "S_apellido",
-      "cargoID",
-      "sueldo",
-      "horas_extras",
-      "fecha_ingreso",
-      "fecha_nacimiento",
+      "empleadoId",
+      "NOMBRE_EMPLEADO",
       "sucursalID"
     ],
-    "consulta": "select * from [EMPLEADO];"
-  },
-  {
-    "tipo": "tabla",
-    "origen": "[MARCA]",
-    "destino": "[MARCA]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "marcaID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "marcaID"
-      },
-      {
-        "campo_destino": "nombre_marca",
-        "tipo_dato": "nvarchar",
-        "longitud": "30",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "nombre_Marca"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "marcaID",
-      "nombre_Marca",
-      "pais_origen"
-    ],
-    "consulta": "select * from [MARCA];"
+    "consulta": "select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;"
   }
 ]

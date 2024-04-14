@@ -1,0 +1,36 @@
+
+<%-include('plantillas/cabecera', {titulo: 'ejecutar_etl'})%>
+
+<%-include ('plantillas/navbar') %>
+
+
+<div class="container" style="max-width: 450px"> 
+
+
+    
+
+      
+          <table class="table table-borderless">
+            <thead>
+              <tr><h4>Lista de ETLs</h4></tr>
+              <hr>
+            </thead>
+            <tbody>
+              <% etl_ejecutados.forEach(elemento => { %>
+                  <tr>
+                        <td>
+                            <button><%=elemento.destino%></button>
+                        </td>
+                        <td>
+                            <%=elemento.estado %>
+                        </td>
+                  </tr>
+              <% }) %>
+            </tbody>
+          </table>
+
+</div>
+
+
+</body>
+</html>

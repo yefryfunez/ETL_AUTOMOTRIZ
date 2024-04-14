@@ -9,7 +9,7 @@ function guardar_etl(data){
         if(err){
             console.log('Ocurio un error: \n', err)
         }else{
-            console.log('ETL guardado exitosamente')
+            console.log('ETL Actualizado exitosamente')
         }
     })
 }
@@ -72,7 +72,6 @@ function  iniciar () {
 
 /*  ======================================================== METODO GET ===============================================================*/
 actualizar_etl.get = (req, res) => {
-    console.log('lectura del etl')
     if(dbdatos.lista_etl.length === 0) leer_etl();
     iniciar();
     res.render('actualizar_etl',{
@@ -87,11 +86,10 @@ actualizar_etl.get = (req, res) => {
 
 
 
-function buscarETL(origen){
+function buscarETL(destino){
     for(let i=0; i<dbdatos.lista_etl.length; i++){
-        if(dbdatos.lista_etl[i].origen === origen) return i;
+        if(dbdatos.lista_etl[i].destino === destino) return i;
     }
-    console.log(i);
 }
 
 
@@ -103,8 +101,11 @@ function buscarETL(origen){
 /* ############################################################################################################################################################# */
 actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
-    console.log('********************************************** respuesta ***************************************************')
-    console.log(respuesta)
+/*     console.log('********************************************** respuesta ***************************************************')
+    console.log(respuesta) */
+    
+
+    
     
     if(respuesta.etl != undefined){
         constantes.i = buscarETL(respuesta.etl);
@@ -170,7 +171,7 @@ actualizar_etl.post = async (req, res) => {
 
 
                         try {
-    if(respuesta.etl === undefined){
+            if(respuesta.etl === undefined){
                             const pool = await dbdatos.getConnection(); //CONEXION A LA BASE DE DATOS
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
@@ -190,24 +191,34 @@ actualizar_etl.post = async (req, res) => {
                             }else{
                                         /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, CUANDO SE SELECCIONA TABLA */
                                         if(respuesta.concatenar != undefined) {
-                                                let concat = 0;
-                                                for(let i=0; i<constantes.campos_tabla_olap.length; i++){
-                                                    constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
-                                                    constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
-                                                    constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                                    constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
+                                            let concat = 0;
+                                            let campos = '';
+                                            for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
+                                                constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
+                                                constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
 
-                                                    if(respuesta.campo_origen != undefined) {
-                                                        if(constantes.campos_tabla_olap[i].concatenar === 'si'){
-                                                            concat -= 1;
-                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
-                                                        } else {
-                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
-                                                        }
+                                                if(respuesta.campo_origen != undefined) {
+                                                    if(constantes.campos_tabla_olap[i].concatenar === 'si'){
+                                                        concat -= 1;
+                                                        constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
+                                                        if(Array.isArray(respuesta.campos_a_concatenar))
+                                                            campos += 'concat(' + constantes.campos_tabla_olap[i].campo_origen.join(' ,\'  \', ') + ') as ' + constantes.campos_tabla_olap[i].campo_destino + ', ';
+                                                    } else {
+                                                        if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                        else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
+
+                                                        if(respuesta.campo_origen[concat] != 'ninguno')
+                                                            campos += respuesta.campo_origen[concat] + ', '; 
                                                     }
-                                                    concat += 1;
                                                 }
-                                        }
+                                                concat += 1;
+                                            }
+                                             campos = campos.slice(0,campos.length-2)
+                                            if(campos != '')
+                                                constantes.consulta = `select ${campos} from ${constantes.origen};`
+                                    }
                             }
                             
                             
@@ -219,12 +230,13 @@ actualizar_etl.post = async (req, res) => {
                                     for(let i=0; i<constantes.campos_tabla_olap.length; i++){
                                                         constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
                                                         constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                        constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
                                                         constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
                                     }
                                     //console.log(constantes.campos_tabla_olap);
                                 }
                             }
-    }
+            }
 
 
                             /* =========================== GUARDAR EL ETL PARA LA DIMENSION ESPECIFICADA ============================== */
@@ -257,14 +269,7 @@ actualizar_etl.post = async (req, res) => {
     }/* *************************************************************************************************************************************************************************** */
 
 
-    
 
- /*
-    console.log('constantes:')
-    console.log(constantes) 
-
-    console.log('respuesta:')
-   console.log(respuesta); */
    
     res.render('actualizar_etl',{
         dbdatos,
