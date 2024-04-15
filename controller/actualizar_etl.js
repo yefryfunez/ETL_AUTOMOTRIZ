@@ -90,6 +90,7 @@ function buscarETL(destino){
     for(let i=0; i<dbdatos.lista_etl.length; i++){
         if(dbdatos.lista_etl[i].destino === destino) return i;
     }
+    return -1;
 }
 
 
@@ -101,8 +102,7 @@ function buscarETL(destino){
 /* ############################################################################################################################################################# */
 actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
-    console.log('********************************************** respuesta ***************************************************')
-    console.log(respuesta) 
+
 
     if(respuesta.Eliminar != undefined){
         if(respuesta.Eliminar === 'Eliminar'){
@@ -123,7 +123,7 @@ actualizar_etl.post = async (req, res) => {
         constantes.campos_tabla_oltp = dbdatos.lista_etl[constantes.i].campos_tabla_oltp;
         constantes.consulta = dbdatos.lista_etl[constantes.i].consulta;
     }
-    console.log(constantes)
+
 
     //UNA VEZ SELECCIONADA LA TABLA O CONSULTA PARA OBTENER LOS DATOS DE LA BASE DE DATOS ORIGEN
     /* *************************************************************************************************************************************************** */
@@ -144,7 +144,7 @@ actualizar_etl.post = async (req, res) => {
         };
     }else{
         if(respuesta.consulta != undefined){
-                        constantes.consulta = respuesta.consulta 
+                        constantes.consulta = respuesta.consulta ;
                         constantes.campos_tabla_oltp = [];
         }
     }
@@ -156,16 +156,10 @@ actualizar_etl.post = async (req, res) => {
     /* *************************************************************************************************************************************************** */
     if(respuesta.destino != undefined)  {
             constantes.destino = '[' + respuesta.destino + ']' 
-
-            //validacion para verificar que no exista un etl para la tabla destino seleccionada
-            dbdatos.lista_etl.forEach(elemento => {
-                        if(elemento.destino === constantes.destino){
-                                constantes.consulta = '';
-                                constantes.origen = 'seleccione una tabla';
-                                mensaje = 'Ya existe un etl para la dimension => '+respuesta.destino;
-                                return;
-                        }
-            })
+            const it = buscarETL(respuesta.destino);
+            if(it != -1){
+                dbdatos.lista_etl.splice(it,1);
+            }
     }
     
 
@@ -198,55 +192,52 @@ actualizar_etl.post = async (req, res) => {
                             }else{
                                         /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, CUANDO SE SELECCIONA TABLA */
                                         if(respuesta.concatenar != undefined) {
-                                            let concat = 0;
-                                            let campos = '';
-                                            for(let i=0; i<constantes.campos_tabla_olap.length; i++){
-                                                constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
-                                                constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
-                                                constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                                constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
-
-                                                if(respuesta.campo_origen != undefined) {
-                                                    if(constantes.campos_tabla_olap[i].concatenar === 'si'){
-                                                        concat -= 1;
-                                                        constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
-                                                        if(Array.isArray(respuesta.campos_a_concatenar))
-                                                            campos += 'concat(' + constantes.campos_tabla_olap[i].campo_origen.join(' ,\'  \', ') + ') as ' + constantes.campos_tabla_olap[i].campo_destino + ', ';
-                                                    } else {
-                                                        if(Array.isArray(respuesta.campo_origen)) {
-                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
-                                                        }
-                                                        else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
-
-                                                        if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
-                                                            campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
-                                                    }
-                                                }
-                                                concat += 1;
-                                            }
-                                            console.log('**********************************campos*************************************************')
-                                            console.log(campos);
-                                             campos = campos.slice(0,campos.length-2)
-                                            if(campos != '')
-                                                constantes.consulta = `select ${campos} from ${constantes.origen};`
-                                    }
-                            }
-                            
-                            
-
-                            /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, EN CASO DE QUE SE ELIJA CONSULTA*/
-                            if(constantes.tipo === 'consulta'){
-                                if(constantes.consulta != '' && respuesta.campo_origen != undefined){
-
-                                    for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                    let concat = 0;
+                                                    let campos = '';
+                                                    for(let i=0; i<constantes.campos_tabla_olap.length; i++){
                                                         constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
                                                         constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
                                                         constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                                        constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
-                                    }
-                                    //console.log(constantes.campos_tabla_olap);
-                                }
+                                                        constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
+
+                                                        if(respuesta.campo_origen != undefined) {
+                                                            if(constantes.campos_tabla_olap[i].concatenar === 'si'){
+                                                                concat -= 1;
+                                                                constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
+                                                                if(Array.isArray(respuesta.campos_a_concatenar))    campos += constantes.campos_tabla_olap[i].campo_origen.join(', ') + ', ';
+                                                                else    campos += constantes.campos_tabla_olap[i].campo_origen + ', ';
+                                                            } else {
+                                                                if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                                else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
+
+                                                                if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
+                                                                    campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
+                                                            }
+                                                        }
+                                                        concat += 1;
+                                                    }
+                                                    console.log('**********************************campos*************************************************')
+                                                    console.log(campos);
+                                                    
+                                                    campos = campos.slice(0,campos.length-2)
+                                                    if(campos != '')
+                                                        constantes.consulta = `select ${campos} from ${constantes.origen};`
+                                                        console.log(constantes.consulta)
+                                        }else{
+                                                    if(constantes.consulta != '' && respuesta.campo_origen != undefined){
+
+                                                        for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                                            constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
+                                                                            constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                                            constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
+                                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
+                                                        }
+                                                        //console.log(constantes.campos_tabla_olap);
+                                                    }
+                                        }
                             }
+                            
+
             }
 
 

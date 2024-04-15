@@ -163,59 +163,65 @@ etl.post = async (req, res) => {
                             
                             //OBTENER LOS CAMPOS DE LA BASE DE DATOS ORIGEN SELECCIONADA O DE LA CONSULTA
                             const campos_tabla_oltp = await pool.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
-                            if(constantes.campos_tabla_oltp.length === 0){
+
+                            if(constantes.campos_tabla_oltp.length === 0 ){
                                         const campos = campos_tabla_oltp.recordset;
                                         constantes.campos_tabla_oltp.push('ninguno')
                                         for (let prop in campos[0]){
                                             constantes.campos_tabla_oltp.push(prop);
                                         }
                             }else{
-                                        /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, CUANDO SE SELECCIONA TABLA */
-                                        if(respuesta.concatenar != undefined) {
-                                                let concat = 0;
-                                                let campos = '';
-                                                for(let i=0; i<constantes.campos_tabla_olap.length; i++){
-                                                    constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
-                                                    constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
-                                                    constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                                    constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
 
-                                                    if(respuesta.campo_origen != undefined) {
-                                                        if(constantes.campos_tabla_olap[i].concatenar === 'si'){
-                                                            concat -= 1;
-                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
-                                                            if(Array.isArray(respuesta.campos_a_concatenar))
-                                                                campos += 'concat(' + constantes.campos_tabla_olap[i].campo_origen.join(' ,\'  \', ') + ') as ' + constantes.campos_tabla_olap[i].campo_destino + ', ';
-                                                        } else {
-                                                            if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
-                                                            else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
+                                                        /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, CUANDO SE SELECCIONA TABLA */
+                                                        if(respuesta.concatenar != undefined) {
+                                                            let concat = 0;
+                                                            let campos = '';
+                                                            for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                                constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
+                                                                constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                                constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
+                                                                constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
 
-                                                            if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
-                                                            campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
+                                                                if(respuesta.campo_origen != undefined) {
+                                                                    if(constantes.campos_tabla_olap[i].concatenar === 'si'){
+                                                                        concat -= 1;
+                                                                        constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
+                                                                        if(Array.isArray(respuesta.campos_a_concatenar))    campos += constantes.campos_tabla_olap[i].campo_origen.join(', ') + ', ';
+                                                                        else    campos += constantes.campos_tabla_olap[i].campo_origen + ', ';
+                                                                    } else {
+                                                                        if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                                        else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
+
+                                                                        if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
+                                                                            campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
+                                                                    }
+                                                                }
+                                                                concat += 1;
+                                                            }
+                                                            console.log('**********************************campos*************************************************')
+                                                            console.log(campos);
+                                                            
+                                                            campos = campos.slice(0,campos.length-2)
+                                                            if(campos != '')
+                                                                constantes.consulta = `select ${campos} from ${constantes.origen};`
+                                                                console.log(constantes.consulta)
+                                                        }else{
+                                                            if(constantes.consulta != '' && respuesta.campo_origen != undefined){
+
+                                                                for(let i=0; i<constantes.campos_tabla_olap.length; i++){
+                                                                                    constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
+                                                                                    constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
+                                                                                    constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
+                                                                                    constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
+                                                                }
+                                                                //console.log(constantes.campos_tabla_olap);
+                                                            }
                                                         }
-                                                    }
-                                                    concat += 1;
-                                                }
-                                                 campos = campos.slice(0,campos.length-2)
-                                                if(campos != '')
-                                                    constantes.consulta = `select ${campos} from ${constantes.origen};`
-                                        }
                             }
-                            
+             
                             
 
-                            /* GUARDAR LOS DATOS DE MODIFICAR O CONCATENAR ASI COMO EL TIPO DE DATOS Y EL CAMPO ORIGEN PAR CADA CAMPO DESTINO, EN CASO DE QUE SE ELIJA CONSULTA*/
-                            if(constantes.tipo === 'consulta'){
-                                if(constantes.consulta != '' && respuesta.campo_origen != undefined){
 
-                                    for(let i=0; i<constantes.campos_tabla_olap.length; i++){
-                                                        constantes.campos_tabla_olap[i].tipo_dato = respuesta.tipo_dato[i];
-                                                        constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
-                                                        constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
-                                                        constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
-                                    }
-                                }
-                            }
                             
 
 

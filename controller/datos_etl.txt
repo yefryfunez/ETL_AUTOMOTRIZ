@@ -29,8 +29,8 @@
     "consulta": "select sucursalID, Nom_sucursal from [SUCURSAL];"
   },
   {
-    "tipo": "tabla",
-    "origen": "[EMPLEADO]",
+    "tipo": "consulta",
+    "origen": "seleccione una tabla",
     "destino": "[EMPLEADO]",
     "campos_tabla_olap": [
       {
@@ -39,18 +39,15 @@
         "longitud": "5",
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "empleadoID"
+        "campo_origen": "empleadoId"
       },
       {
         "campo_destino": "nombre_empleado",
         "tipo_dato": "nvarchar",
         "longitud": "102",
-        "modificar": "Normal",
-        "concatenar": "si",
-        "campo_origen": [
-          "P_nombre",
-          "P_apellido"
-        ]
+        "modificar": "Mayuscula",
+        "concatenar": "no",
+        "campo_origen": "ninguno"
       },
       {
         "campo_destino": "sucursalID",
@@ -63,19 +60,11 @@
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "empleadoID",
-      "P_nombre",
-      "S_nombre",
-      "P_apellido",
-      "S_apellido",
-      "cargoID",
-      "sueldo",
-      "horas_extras",
-      "fecha_ingreso",
-      "fecha_nacimiento",
+      "empleadoId",
+      "NOMBRE_EMPLEADO",
       "sucursalID"
     ],
-    "consulta": "select empleadoID, concat(P_nombre ,'  ', P_apellido) as nombre_empleado, sucursalID from [EMPLEADO];"
+    "consulta": "select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;"
   },
   {
     "tipo": "tabla",
@@ -124,7 +113,7 @@
         "campo_destino": "nombre_modelo",
         "tipo_dato": "nvarchar",
         "longitud": "150",
-        "modificar": "Mayuscula",
+        "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "nombre_Modelo"
       },
@@ -162,7 +151,7 @@
         "campo_destino": "descripcion_repuesto",
         "tipo_dato": "nvarchar",
         "longitud": "100",
-        "modificar": "Minuscula",
+        "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "Descripcion_rep"
       }
@@ -188,7 +177,7 @@
         "longitud": "0",
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "fecha"
+        "campo_origen": "fecha_pago"
       },
       {
         "campo_destino": "año",
@@ -217,12 +206,12 @@
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "fecha",
+      "fecha_pago",
       "año",
       "trimestre",
       "mes"
     ],
-    "consulta": "select format(fecha_pago, 'yyyy-MM-dd') as fecha, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
+    "consulta": "select fecha_pago, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
   },
   {
     "tipo": "consulta",
@@ -286,6 +275,6 @@
       "fecha_pago",
       "TOTAL_REPUESTOS"
     ],
-    "consulta": "SELECT REPUESTOID, E.EMPLEADOID, v.MODELOID, format(fecha_pago, 'yyyy-MM-dd') fecha_pago, \tSUM(TOTAL_REPUESTO*(1-DESCUENTO)*1.12) TOTAL_REPUESTOS FROM ORDEN_SERVICIO OS INNER JOIN DETALLE_REPUESTO DR ON DR.ordenID = OS.OrdenID  \tINNER JOIN FACTURA F ON F.ordenID = OS.OrdenID INNER JOIN EMPLEADO E ON E.empleadoID =OS.empleadoID \tINNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;"
+    "consulta": "SELECT REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago, SUM(TOTAL_REPUESTO*(1-DESCUENTO)*1.12) TOTAL_REPUESTOS FROM ORDEN_SERVICIO OS INNER JOIN DETALLE_REPUESTO DR ON DR.ordenID = OS.OrdenID  INNER JOIN FACTURA F ON F.ordenID = OS.OrdenID INNER JOIN EMPLEADO E ON E.empleadoID =OS.empleadoID INNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;"
   }
 ]
