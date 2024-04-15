@@ -190,8 +190,8 @@ etl.post = async (req, res) => {
                                                             if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
                                                             else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
 
-                                                            if(respuesta.campo_origen[concat] != 'ninguno')
-                                                                campos += respuesta.campo_origen[concat] + ', '; 
+                                                            if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
+                                                            campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
                                                         }
                                                     }
                                                     concat += 1;

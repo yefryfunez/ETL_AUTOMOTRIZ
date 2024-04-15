@@ -101,10 +101,17 @@ function buscarETL(destino){
 /* ############################################################################################################################################################# */
 actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
-/*     console.log('********************************************** respuesta ***************************************************')
-    console.log(respuesta) */
-    
+    console.log('********************************************** respuesta ***************************************************')
+    console.log(respuesta) 
 
+    if(respuesta.Eliminar != undefined){
+        if(respuesta.Eliminar === 'Eliminar'){
+            dbdatos.lista_etl.splice(0,dbdatos.lista_etl.length);
+            const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+            guardar_etl(lista_etl_json)
+            
+        }
+    } 
     
     
     if(respuesta.etl != undefined){
@@ -206,15 +213,19 @@ actualizar_etl.post = async (req, res) => {
                                                         if(Array.isArray(respuesta.campos_a_concatenar))
                                                             campos += 'concat(' + constantes.campos_tabla_olap[i].campo_origen.join(' ,\'  \', ') + ') as ' + constantes.campos_tabla_olap[i].campo_destino + ', ';
                                                     } else {
-                                                        if(Array.isArray(respuesta.campo_origen)) constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                        if(Array.isArray(respuesta.campo_origen)) {
+                                                            constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[concat]; 
+                                                        }
                                                         else constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen; 
 
-                                                        if(respuesta.campo_origen[concat] != 'ninguno')
-                                                            campos += respuesta.campo_origen[concat] + ', '; 
+                                                        if(constantes.campos_tabla_olap[i].campo_origen != 'ninguno')
+                                                            campos += constantes.campos_tabla_olap[i].campo_origen + ', '; 
                                                     }
                                                 }
                                                 concat += 1;
                                             }
+                                            console.log('**********************************campos*************************************************')
+                                            console.log(campos);
                                              campos = campos.slice(0,campos.length-2)
                                             if(campos != '')
                                                 constantes.consulta = `select ${campos} from ${constantes.origen};`

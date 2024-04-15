@@ -30,6 +30,55 @@
   },
   {
     "tipo": "tabla",
+    "origen": "[EMPLEADO]",
+    "destino": "[EMPLEADO]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "empleadoID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "empleadoID"
+      },
+      {
+        "campo_destino": "nombre_empleado",
+        "tipo_dato": "nvarchar",
+        "longitud": "102",
+        "modificar": "Normal",
+        "concatenar": "si",
+        "campo_origen": [
+          "P_nombre",
+          "P_apellido"
+        ]
+      },
+      {
+        "campo_destino": "sucursalID",
+        "tipo_dato": "nchar",
+        "longitud": "5",
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "sucursalID"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "empleadoID",
+      "P_nombre",
+      "S_nombre",
+      "P_apellido",
+      "S_apellido",
+      "cargoID",
+      "sueldo",
+      "horas_extras",
+      "fecha_ingreso",
+      "fecha_nacimiento",
+      "sucursalID"
+    ],
+    "consulta": "select empleadoID, concat(P_nombre ,'  ', P_apellido) as nombre_empleado, sucursalID from [EMPLEADO];"
+  },
+  {
+    "tipo": "tabla",
     "origen": "[MARCA]",
     "destino": "[MARCA]",
     "campos_tabla_olap": [
@@ -59,44 +108,6 @@
     "consulta": "select marcaID, nombre_Marca from [MARCA];"
   },
   {
-    "tipo": "consulta",
-    "origen": "seleccione una tabla",
-    "destino": "[EMPLEADO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "empleadoID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "empleadoId"
-      },
-      {
-        "campo_destino": "nombre_empleado",
-        "tipo_dato": "nvarchar",
-        "longitud": "102",
-        "modificar": "Mayuscula",
-        "concatenar": "no",
-        "campo_origen": "NOMBRE_EMPLEADO"
-      },
-      {
-        "campo_destino": "sucursalID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "sucursalID"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "empleadoId",
-      "NOMBRE_EMPLEADO",
-      "sucursalID"
-    ],
-    "consulta": "select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;"
-  },
-  {
     "tipo": "tabla",
     "origen": "[MODELO]",
     "destino": "[MODELO]",
@@ -113,7 +124,7 @@
         "campo_destino": "nombre_modelo",
         "tipo_dato": "nvarchar",
         "longitud": "150",
-        "modificar": "Normal",
+        "modificar": "Mayuscula",
         "concatenar": "no",
         "campo_origen": "nombre_Modelo"
       },
@@ -151,7 +162,7 @@
         "campo_destino": "descripcion_repuesto",
         "tipo_dato": "nvarchar",
         "longitud": "100",
-        "modificar": "Mayuscula",
+        "modificar": "Minuscula",
         "concatenar": "no",
         "campo_origen": "Descripcion_rep"
       }
@@ -260,7 +271,7 @@
       },
       {
         "campo_destino": "total_repuesto",
-        "tipo_dato": "int",
+        "tipo_dato": "money",
         "longitud": "0",
         "modificar": "Normal",
         "concatenar": "no",

@@ -3,8 +3,15 @@
 
 <%-include ('plantillas/navbar') %>
 
+<table class="table" style="max-width: 1250px; align-items: flex-start;">
+  <tbody>
+    <tr>
+      <td>
 
-<div class="container" style="max-width: 450px"> 
+
+
+
+<div class="container" style="padding: 20px;max-width: 450px"> 
   <table class="table">
     <tbody>
       <tr>
@@ -51,11 +58,12 @@
     </form>
 </div>
 
+</td>
+<td>
+  
+
 
 <% if (constantes.i > -1) { %>
- 
-
-
 
         <!-- ================================================================================================================================================ -->
         <!--                                       CONSTAINER PARA EL PROCESO DE CONVERSION DE LOS CAMPOS DE LA TABLA SELECCIONADA -->
@@ -319,5 +327,12 @@
 
 
 <% } %>
+
+
+
+</td>
+</tr>
+</tbody>
+</table>
 </body>
 </html>
