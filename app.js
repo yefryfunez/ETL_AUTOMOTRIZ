@@ -4,12 +4,6 @@ const path = require('path');
 const rutas = require('./routes/rutas');
 
 
-/* ******************************************************************************************************************************* */
-
-
-/* ******************************************************************************************************************************* */
-
-
 
 
 //configuraciones
@@ -21,7 +15,6 @@ app.set('views', path.join(__dirname,'vistas'));
 
 
 //middelwares //utilizan la palabra use
-//app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
@@ -47,6 +40,8 @@ app.use((req, res) => {
 })
 
 
+
+
+
 //configuracion para escuchar en el puerto 3000
 app.listen(app.get('port'), () => {console.log('escuchando en el puerto 3000.')});
-//console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')

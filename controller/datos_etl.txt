@@ -112,6 +112,7 @@
         "campo_destino": "modeloID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "modeloID"
@@ -120,6 +121,7 @@
         "campo_destino": "nombre_modelo",
         "tipo_dato": "nvarchar",
         "longitud": "150",
+        "longitud_maxima": 150,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "nombre_Modelo"
@@ -128,6 +130,7 @@
         "campo_destino": "marcaID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "marcaID"

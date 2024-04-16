@@ -66,10 +66,11 @@ ejecutar_etl.post = async (req, res) => {
                     
                     
                     /* ************************************************************** EXTRACCION ***************************************************************** */
+                    console.log('destino: ',dbdatos.databases.destino);
+                     if(dbdatos.databases.destino == 'DW_AUTOMOTRIZ') await pool.request().query('use DW_AUTOMOTRIZ; delete from hechos_repuestos; delete from tiempo; delete from empleado; delete from modelo; delete from REPUESTO; delete from sucursal; delete from marca;')
                     for(let elemento of dbdatos.lista_etl){
                            filas_afectadas = 0; 
                            mensaje = '_';
-
                             let datos = await pool.request().query(`use ${dbdatos.databases.origen}; ${elemento.consulta}`);//obtener los datos de la tabla origen especificada en el etl
                             datos = datos.recordset;
 
@@ -145,6 +146,7 @@ ejecutar_etl.post = async (req, res) => {
 
 
 
+                            
                             /* ************************************************************** CARGA ***************************************************************** */
 
                                 let tipo_dato = '';
@@ -212,7 +214,7 @@ ejecutar_etl.post = async (req, res) => {
                                                 mensaje = '_';
                                             } catch (error) {
                                                 mensaje = error.message;
-                                                //console.log(mensaje)
+                                                
                                                 break;
                                             }
                                     
@@ -235,7 +237,7 @@ ejecutar_etl.post = async (req, res) => {
 
         } catch (error) {
             console.log(error)
-            //console.log(mensaje)
+            
         }
 
     }//1IF ------------------------------------------------------------------------------------------------------------------------------------------------------- 

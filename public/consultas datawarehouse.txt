@@ -17,7 +17,8 @@ INNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID
 GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;
  
 
-
+alter table empleado alter column sucursalid nchar(5) not null;
+alter table modelo alter column marcaid nchar(5) not null;
 
 
 
