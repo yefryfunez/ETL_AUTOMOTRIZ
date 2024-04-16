@@ -67,7 +67,14 @@ ejecutar_etl.post = async (req, res) => {
                     
                     /* ************************************************************** EXTRACCION ***************************************************************** */
                     console.log('destino: ',dbdatos.databases.destino);
-                     if(dbdatos.databases.destino == 'DW_AUTOMOTRIZ') await pool.request().query('use DW_AUTOMOTRIZ; delete from hechos_repuestos; delete from tiempo; delete from empleado; delete from modelo; delete from REPUESTO; delete from sucursal; delete from marca;')
+                    let tablas_a_limpiar = '';
+                    for(let i=dbdatos.lista_etl.length-1; i>=0; i--){
+                        tablas_a_limpiar += ` delete from ${dbdatos.lista_etl[i].destino}; `
+                    }
+                    
+                    
+                    await pool.request().query(`use ${dbdatos.databases.destino}; ${tablas_a_limpiar}`)
+                    
                     for(let elemento of dbdatos.lista_etl){
                            filas_afectadas = 0; 
                            mensaje = '_';
