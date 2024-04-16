@@ -4,19 +4,27 @@
 <%-include ('plantillas/navbar') %>
 
 
-<div class="container" style="max-width: 450px"> 
+<div class="container" style="max-width: 650px"> 
 
 
     
 
-      
+            <h4>ETLs ejecutados</h4>
+            <hr>
           <table class="table table-borderless">
             <thead>
-              <tr><h4>Lista de ETLs</h4></tr>
-              <hr>
+              <th>Dimension</th>
+              <th>filas afectadas</th>
+              <th>resultado</th>
             </thead>
             <tbody>
-              <h6><%=mensaje %></h6>
+              <% etl_ejecutados.forEach(elemento => { %>
+                  <tr>
+                    <td><%=elemento.etl %></td>
+                    <td><%=elemento.filas_afectadas %></td>
+                    <td><%=elemento.mensaje%></td>
+                  </tr>
+              <% }) %>
             </tbody>
           </table>
 

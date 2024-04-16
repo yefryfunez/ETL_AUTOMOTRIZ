@@ -8,6 +8,7 @@
         "campo_destino": "sucursalID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "sucursalID"
@@ -16,9 +17,10 @@
         "campo_destino": "nombre_sucursal",
         "tipo_dato": "nvarchar",
         "longitud": "100",
+        "longitud_maxima": 100,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "Nom_sucursal"
+        "campo_origen": "sucursalID"
       }
     ],
     "campos_tabla_oltp": [
@@ -26,7 +28,7 @@
       "sucursalID",
       "Nom_sucursal"
     ],
-    "consulta": "select sucursalID, Nom_sucursal from [SUCURSAL];"
+    "consulta": "select sucursalID from [SUCURSAL];"
   },
   {
     "tipo": "consulta",
@@ -37,6 +39,7 @@
         "campo_destino": "empleadoID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "empleadoId"
@@ -45,14 +48,16 @@
         "campo_destino": "nombre_empleado",
         "tipo_dato": "nvarchar",
         "longitud": "102",
+        "longitud_maxima": 102,
         "modificar": "Mayuscula",
         "concatenar": "no",
-        "campo_origen": "ninguno"
+        "campo_origen": "NOMBRE_EMPLEADO"
       },
       {
         "campo_destino": "sucursalID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "sucursalID"
@@ -75,6 +80,7 @@
         "campo_destino": "marcaID",
         "tipo_dato": "nchar",
         "longitud": "5",
+        "longitud_maxima": 5,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "marcaID"
@@ -83,6 +89,7 @@
         "campo_destino": "nombre_marca",
         "tipo_dato": "nvarchar",
         "longitud": "30",
+        "longitud_maxima": 30,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "nombre_Marca"
@@ -229,7 +236,7 @@
       {
         "campo_destino": "repuestoID",
         "tipo_dato": "nchar",
-        "longitud": "5",
+        "longitud": "4",
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "REPUESTOID"

@@ -6,6 +6,8 @@ const sql = require('mssql');
 /*  ======================================================== CONSTANTES ===============================================================*/
 
 let mensaje = '_';
+let filas_afectadas = 0;
+let etl_ejecutados = []
 
 
 
@@ -36,15 +38,6 @@ function leer_etl(){
 
 
 
-/*  ======================================================== FUNCIONES ===============================================================*/
-
-
-
-
-
-
-
-
 
 
 /*  ======================================================== METODO GET ===============================================================*/
@@ -70,14 +63,18 @@ ejecutar_etl.post = async (req, res) => {
         
         try {
                     const pool = await dbdatos.getConnection();
-                    let i = 0;
+                    
                     
                     /* ************************************************************** EXTRACCION ***************************************************************** */
                     for(let elemento of dbdatos.lista_etl){
-                    //dbdatos.lista_etl.forEach( async elemento => {// 1FOR ------------------------------------------------------------------------------------------------------------------------
-                            
+                           filas_afectadas = 0; 
+                           mensaje = '_';
+
                             let datos = await pool.request().query(`use ${dbdatos.databases.origen}; ${elemento.consulta}`);//obtener los datos de la tabla origen especificada en el etl
                             datos = datos.recordset;
+
+
+                        
 
 
 
@@ -91,41 +88,36 @@ ejecutar_etl.post = async (req, res) => {
 
 
                     /* *********************************************************** TRANSFORMACION ***************************************************************** */
-                            let datos_modificados = [];
-                            datos.forEach(registro => {
-                                let i=0;
-                                let j=0;
-                                let registro_modificado = {};
-                                for(let p in registro){
-                                    if(elemento.campos_tabla_olap[i].campo_origen === 'ninguno') i++;
-                                    if(typeof registro[p] === 'string'){
-                                            
-                                            /* CONVIERTE EL DATO A MAYUSCULA O MINUSCULA SEGUN SE HAYA ELEGIDO */
-                                            if(elemento.campos_tabla_olap[i].modificar === 'Mayuscula') registro[p] = registro[p].toUpperCase();
-                                            if(elemento.campos_tabla_olap[i].modificar === 'Minuscula') registro[p] = registro[p].toLowerCase();
 
-                                            /* CONCATENAR LOS CAMPOS SI HAY QUE CONCATENAR */
-                                            if(elemento.campos_tabla_olap[i].concatenar === 'si'){
-                                                    j++;
-                                                    if(registro_modificado[elemento.campos_tabla_olap[i].campo_destino] === undefined) registro_modificado[elemento.campos_tabla_olap[i].campo_destino] = registro[p];
-                                                    else registro_modificado[elemento.campos_tabla_olap[i].campo_destino] += ' ' + registro[p];
-
-                                                    if(Array.isArray(elemento.campos_tabla_olap[i].campo_origen))
-                                                        if(j < elemento.campos_tabla_olap[i].campo_origen.length ) i--;
-                                                    
-                                                        registro_modificado[elemento.campos_tabla_olap[i].campo_destino] = registro_modificado[elemento.campos_tabla_olap[i].campo_destino].substring(0,elemento.campos_tabla_olap[i].longitud)
-                                            }else{
-                                                    registro_modificado[elemento.campos_tabla_olap[i].campo_destino] = registro[p].substring(0,elemento.campos_tabla_olap[i].longitud).trim();
-
+                        let datos_modificados = [];
+                        datos.forEach(registro =>{
+                            let registro_modificado = {};
+                            elemento.campos_tabla_olap.forEach(info => {
+                                if(info.campo_origen != 'ninguno'){
+                                    if(info.concatenar === 'si'){
+                                            if(Array.isArray(info.campo_origen)){
+                                                    let concatenacion = '';
+                                                    info.campo_origen.forEach(e => {
+                                                        concatenacion += registro[e].trim() + ' ';
+                                                    })
+                                                registro_modificado[info.campo_destino] = concatenacion.substring(0,info.longitud).trim();
+                                            } else {
+                                                registro_modificado[info.campo_destino] = registro[info.campo_origen].substring(0,info.longitud).trim();
                                             }
-                                    } else {
-                                            registro_modificado[elemento.campos_tabla_olap[i].campo_destino] = registro[p];
+                                    }else{
+                                        if(typeof registro[info.campo_origen] === 'string')
+                                            registro_modificado[info.campo_destino] = registro[info.campo_origen].substring(0,info.longitud).trim();
+                                        else
+                                            registro_modificado[info.campo_destino] = registro[info.campo_origen];
+                                        
                                     }
-                                    i++;
+                                    if(info.modificar === 'Mayuscula') registro_modificado[info.campo_destino] = registro_modificado[info.campo_destino].toUpperCase();
+                                    if(info.modificar === 'Minuscula') registro_modificado[info.campo_destino] = registro_modificado[info.campo_destino].toLowerCase();
                                 }
-                                datos_modificados.push(registro_modificado)
                             })
-                            //console.log(datos_modificados);
+                            datos_modificados.push(registro_modificado);
+                        })
+                        //console.log(datos_modificados)
 
 
 
@@ -149,13 +141,13 @@ ejecutar_etl.post = async (req, res) => {
 
 
 
-                            let data = '';
-                            let tipo_dato = '';
-                    /* ************************************************************** CARGA ***************************************************************** */
-
-                                
 
 
+
+
+                            /* ************************************************************** CARGA ***************************************************************** */
+
+                                let tipo_dato = '';
                                 for(let objeto of datos_modificados){
                                     let icampos = 0;
                                     const request = pool.request();
@@ -199,7 +191,7 @@ ejecutar_etl.post = async (req, res) => {
                                                         }
                                                         
                                                         
-                                                        //console.log(elemento.campos_tabla_olap[icampos].campo_destino, ' , ', tipo_dato,' , ', objeto[prop]);
+                                                        // console.log(elemento.campos_tabla_olap[icampos].campo_destino, ' , ', tipo_dato,' , ', objeto[prop]);
                                                         
                                                         request.input(elemento.campos_tabla_olap[icampos].campo_destino, tipo_dato, objeto[prop]);
                                                 } catch (error) {
@@ -215,32 +207,35 @@ ejecutar_etl.post = async (req, res) => {
     
                                     
                                             try {
-                                                await request.query(`use ${dbdatos.databases.destino}; insert into ${elemento.destino} (${columnas}) values (${alias});`);
+                                                const re = await request.query(`use ${dbdatos.databases.destino}; insert into ${elemento.destino} (${columnas}) values (${alias});`);
+                                                filas_afectadas += parseInt(re.rowsAffected);
                                                 mensaje = '_';
                                             } catch (error) {
                                                 mensaje = error.message;
-                                                console.log(mensaje)
+                                                //console.log(mensaje)
                                                 break;
                                             }
-                                            // console.log(re);
                                     
-    
+                                            
                                     
                                 }//2FOR CADA REGISTRO
                                 if(mensaje != '_'){
-                                    mensaje = 'ocurrio el siguiente error en el etl para la dimension: ' + elemento.destino + '\n' + mensaje
+                                    mensaje = 'ocurrio el siguiente error:  \n'  + mensaje
+                                    etl_ejecutados.push({etl: `${elemento.destino}`, filas_afectadas, mensaje})
+                                    console.log(mensaje);
                                     break;
                                 }
-/*                                 console.log(`¡ETL para la dimensión ${elemento.destino} completado con exito!`)
-                                mensaje = `¡ETL para la dimensión ${elemento.destino} completado con exito!`; */
+
 
                             
                     console.log('ETL terminado correctamente para la dimension: ', elemento.destino);
-                    }// 1FOR ETL------------------------------------------------------------------------------------------------------------------------
                     if(mensaje === '_') mensaje = 'ETL terminado correctamente!';
+                    etl_ejecutados.push({etl: `${elemento.destino}`, filas_afectadas, mensaje})
+                    }// 1FOR ETL------------------------------------------------------------------------------------------------------------------------
+
         } catch (error) {
-            mensaje = 'Ocurio el siguiente error: \n\n', error.message;
-            console.log(mensaje)
+            console.log(error)
+            //console.log(mensaje)
         }
 
     }//1IF ------------------------------------------------------------------------------------------------------------------------------------------------------- 

@@ -177,7 +177,7 @@ actualizar_etl.post = async (req, res) => {
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
                             const campos_tabla_olap = await pool.request().query(
-                                `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
+                                `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, CHARACTER_MAXIMUM_LENGTH as longitud_maxima, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
                             constantes.campos_tabla_olap = campos_tabla_olap.recordset;
                             
                             
@@ -199,9 +199,9 @@ actualizar_etl.post = async (req, res) => {
                                                         constantes.campos_tabla_olap[i].longitud = respuesta.longitud[i];
                                                         constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
                                                         constantes.campos_tabla_olap[i].concatenar = respuesta.concatenar[i];
-
+                                                        
                                                         if(respuesta.campo_origen != undefined) {
-                                                            if(constantes.campos_tabla_olap[i].concatenar === 'si'){
+                                                            if(constantes.campos_tabla_olap[i].concatenar === 'si' && respuesta.campos_a_concatenar != undefined){
                                                                 concat -= 1;
                                                                 constantes.campos_tabla_olap[i].campo_origen = respuesta.campos_a_concatenar;
                                                                 if(Array.isArray(respuesta.campos_a_concatenar))    campos += constantes.campos_tabla_olap[i].campo_origen.join(', ') + ', ';
@@ -216,10 +216,14 @@ actualizar_etl.post = async (req, res) => {
                                                         }
                                                         concat += 1;
                                                     }
-                                                    console.log('**********************************campos*************************************************')
-                                                    console.log(campos);
-                                                    
+                                                    //eliminar campos duplicados
                                                     campos = campos.slice(0,campos.length-2)
+                                                    let palabras = campos.split(', ');
+                                                    let palabrasUnicas = [...new Set(palabras)];
+                                                    campos = palabrasUnicas.join(', ');
+
+                                                    // console.log('**********************************campos*************************************************')
+                                                    // console.log(campos);
                                                     if(campos != '')
                                                         constantes.consulta = `select ${campos} from ${constantes.origen};`
                                                         console.log(constantes.consulta)

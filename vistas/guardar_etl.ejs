@@ -127,7 +127,7 @@
                       <!-- ================================================================================================================================ -->
                       <td>
                         <% if (elemento.tipo_dato == 'nvarchar' || elemento.tipo_dato == 'varchar' || elemento.tipo_dato == 'char' || elemento.tipo_dato == 'nchar') { %>
-                          <input style="width: 60px; margin-bottom: 0px; padding: 3px;" type="text" name="longitud" id="longitud" value=<%=elemento.longitud %>>
+                          <input style="width: 60px; margin-bottom: 0px; padding: 3px;" type="number" name="longitud" id="longitud" value=<%=elemento.longitud %> min=5 max=<%=elemento.longitud_maxima %>>
                         <% } else { %>
                            <input style="width: 30px;" name="longitud" id="longitud" type="text" value=0 hidden>
                         <% } %>
