@@ -1,0 +1,41 @@
+use AUTOMOTRIZ;
+
+--tablas de dimenciones
+select * from SUCURSAL;
+select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;
+select marcaID, nombre_Marca from MARCA;
+select * from MODELO;
+select repuestoid, Descripcion_rep from repuesto;
+select fecha_pago, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;
+
+
+--tabla de hechos
+SELECT REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago, SUM(TOTAL_REPUESTO*(1-DESCUENTO)*1.12) TOTAL_REPUESTOS
+FROM ORDEN_SERVICIO OS INNER JOIN DETALLE_REPUESTO DR ON DR.ordenID = OS.OrdenID 
+INNER JOIN FACTURA F ON F.ordenID = OS.OrdenID INNER JOIN EMPLEADO E ON E.empleadoID =OS.empleadoID
+INNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID
+GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;
+ 
+
+
+
+
+
+use DW_AUTOMOTRIZ;
+select * from sucursal;
+select * from empleado;
+select * from marca;
+select * from modelo;
+select * from REPUESTO;
+select * from tiempo;
+select * from hechos_repuestos;
+
+use DW_AUTOMOTRIZ;
+delete from hechos_repuestos;
+delete from tiempo;
+delete from empleado;
+delete from modelo;
+delete from REPUESTO;
+delete from sucursal;
+delete from marca;
+
