@@ -23,9 +23,8 @@ function leer_etl(){
             arreg.forEach(elemento => {
                 dbdatos.lista_etl.push(elemento)
             })
-
-            //console.log(dbdatos.lista_etl);
          } catch (error) {
+            console.log('Ocurrio el siguiente error al leer el archivo: ', error)
             const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
             guardar_etl(lista_etl_json);
          }
@@ -62,19 +61,19 @@ ejecutar_etl.post = async (req, res) => {
     if(dbdatos.lista_etl.length >= 0){//1IF------------------------------------------------------------------------------------------------------------------------------------------------------- 
         
         try {
-                    const pool = await dbdatos.getConnection();
+                    const pool = await dbdatos.getConnection();//crear una conexion
                     
+                    
+                    /* ********************************************** limpiar tablas del data warehouse ************************************************************ */
+                    await pool.request().query(`use ${dbdatos.databases.destino}; EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'; EXEC sp_MSForEachTable 'DELETE FROM ?'; EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL';`)
+                    
+
+
+
+
+
                     
                     /* ************************************************************** EXTRACCION ***************************************************************** */
-                    console.log('destino: ',dbdatos.databases.destino);
-                    let tablas_a_limpiar = '';
-                    for(let i=dbdatos.lista_etl.length-1; i>=0; i--){
-                        tablas_a_limpiar += ` delete from ${dbdatos.lista_etl[i].destino}; `
-                    }
-                    
-                    
-                    await pool.request().query(`use ${dbdatos.databases.destino}; ${tablas_a_limpiar}`)
-                    
                     for(let elemento of dbdatos.lista_etl){
                            filas_afectadas = 0; 
                            mensaje = '_';
@@ -154,7 +153,7 @@ ejecutar_etl.post = async (req, res) => {
 
 
                             
-                            /* ************************************************************** CARGA ***************************************************************** */
+
 
                                 let tipo_dato = '';
                                 for(let objeto of datos_modificados){
@@ -215,9 +214,16 @@ ejecutar_etl.post = async (req, res) => {
                                             // console.log(`use ${dbdatos.databases.destino}; insert into ${elemento.destino} (${columnas}) values (${alias});`);
     
                                     
+
+
+
+
+
+
+                                            /* ************************************************************** CARGA ***************************************************************** */
                                             try {
-                                                const re = await request.query(`use ${dbdatos.databases.destino}; insert into ${elemento.destino} (${columnas}) values (${alias});`);
-                                                filas_afectadas += parseInt(re.rowsAffected);
+                                                const result = await request.query(`use ${dbdatos.databases.destino}; insert into ${elemento.destino} (${columnas}) values (${alias});`);
+                                                filas_afectadas += parseInt(result.rowsAffected);
                                                 mensaje = '_';
                                             } catch (error) {
                                                 mensaje = error.message;

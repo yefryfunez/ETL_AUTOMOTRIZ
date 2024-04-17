@@ -6,6 +6,8 @@ const rutas = require('./routes/rutas');
 
 
 
+
+
 //configuraciones
 app.set('port', 3000);
 app.set('view engine', 'ejs');

@@ -106,7 +106,7 @@ etl.post = async (req, res) => {
         if(constantes.tipo != respuesta.tipo) iniciar();
         constantes.tipo = respuesta.tipo;
     };
-
+    console.log(respuesta)
 
 
     //GUARDAR TABLA ORIGEN O CONSULTA
@@ -157,7 +157,7 @@ etl.post = async (req, res) => {
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
                             const campos_tabla_olap = await pool.request().query(
-                                `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, CHARACTER_MAXIMUM_LENGTH as longitud_maxima,, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
+                                `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, CHARACTER_MAXIMUM_LENGTH as longitud_maxima, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
                             constantes.campos_tabla_olap = campos_tabla_olap.recordset;
                             
                             
@@ -249,6 +249,8 @@ etl.post = async (req, res) => {
                                 }
 
                                 iniciar();
+                                res.redirect('/etls');
+                                return;
                             }
 
                 

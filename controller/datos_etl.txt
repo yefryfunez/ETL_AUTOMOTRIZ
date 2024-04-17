@@ -1,290 +1,245 @@
 [
   {
     "tipo": "tabla",
-    "origen": "[SUCURSAL]",
-    "destino": "[SUCURSAL]",
+    "origen": "[Shippers]",
+    "destino": "[Shippers]",
     "campos_tabla_olap": [
       {
-        "campo_destino": "sucursalID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
+        "campo_destino": "ShipperID",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "sucursalID"
+        "campo_origen": "ShipperID"
       },
       {
-        "campo_destino": "nombre_sucursal",
+        "campo_destino": "CompanyName",
         "tipo_dato": "nvarchar",
-        "longitud": "100",
-        "longitud_maxima": 100,
+        "longitud": "40",
+        "longitud_maxima": 40,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "sucursalID"
+        "campo_origen": "CompanyName"
       }
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "sucursalID",
-      "Nom_sucursal"
+      "ShipperID",
+      "CompanyName",
+      "Phone"
     ],
-    "consulta": "select sucursalID from [SUCURSAL];"
+    "consulta": "select ShipperID, CompanyName from [Shippers];"
   },
   {
     "tipo": "consulta",
     "origen": "seleccione una tabla",
-    "destino": "[EMPLEADO]",
+    "destino": "[tblTiempo]",
     "campos_tabla_olap": [
       {
-        "campo_destino": "empleadoID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "empleadoId"
-      },
-      {
-        "campo_destino": "nombre_empleado",
-        "tipo_dato": "nvarchar",
-        "longitud": "102",
-        "longitud_maxima": 102,
-        "modificar": "Mayuscula",
-        "concatenar": "no",
-        "campo_origen": "NOMBRE_EMPLEADO"
-      },
-      {
-        "campo_destino": "sucursalID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "sucursalID"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "empleadoId",
-      "NOMBRE_EMPLEADO",
-      "sucursalID"
-    ],
-    "consulta": "select empleadoId,  CONCAT(P_nombre,' ',P_apellido) AS NOMBRE_EMPLEADO, sucursalID from EMPLEADO;"
-  },
-  {
-    "tipo": "tabla",
-    "origen": "[MARCA]",
-    "destino": "[MARCA]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "marcaID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "marcaID"
-      },
-      {
-        "campo_destino": "nombre_marca",
-        "tipo_dato": "nvarchar",
-        "longitud": "30",
-        "longitud_maxima": 30,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "nombre_Marca"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "marcaID",
-      "nombre_Marca",
-      "pais_origen"
-    ],
-    "consulta": "select marcaID, nombre_Marca from [MARCA];"
-  },
-  {
-    "tipo": "tabla",
-    "origen": "[MODELO]",
-    "destino": "[MODELO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "modeloID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "modeloID"
-      },
-      {
-        "campo_destino": "nombre_modelo",
-        "tipo_dato": "nvarchar",
-        "longitud": "150",
-        "longitud_maxima": 150,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "nombre_Modelo"
-      },
-      {
-        "campo_destino": "marcaID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "longitud_maxima": 5,
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "marcaID"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "modeloID",
-      "nombre_Modelo",
-      "marcaID"
-    ],
-    "consulta": "select modeloID, nombre_Modelo, marcaID from [MODELO];"
-  },
-  {
-    "tipo": "tabla",
-    "origen": "[REPUESTO]",
-    "destino": "[REPUESTO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "repuestoID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "RepuestoID"
-      },
-      {
-        "campo_destino": "descripcion_repuesto",
-        "tipo_dato": "nvarchar",
-        "longitud": "100",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "Descripcion_rep"
-      }
-    ],
-    "campos_tabla_oltp": [
-      "ninguno",
-      "RepuestoID",
-      "Descripcion_rep",
-      "costo_adquisicion",
-      "costo_venta",
-      "cantidad"
-    ],
-    "consulta": "select RepuestoID, Descripcion_rep from [REPUESTO];"
-  },
-  {
-    "tipo": "consulta",
-    "origen": "seleccione una tabla",
-    "destino": "[TIEMPO]",
-    "campos_tabla_olap": [
-      {
-        "campo_destino": "tiempoID",
+        "campo_destino": "tiempoId",
         "tipo_dato": "date",
         "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "fecha_pago"
+        "campo_origen": "tiempoId"
       },
       {
         "campo_destino": "año",
         "tipo_dato": "int",
         "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "año"
       },
       {
+        "campo_destino": "mes",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "mes"
+      },
+      {
+        "campo_destino": "semana",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "semana"
+      },
+      {
         "campo_destino": "trimestre",
         "tipo_dato": "int",
         "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "trimestre"
       },
       {
-        "campo_destino": "mes",
-        "tipo_dato": "int",
-        "longitud": "0",
+        "campo_destino": "diaDeSemana",
+        "tipo_dato": "varchar",
+        "longitud": "20",
+        "longitud_maxima": 20,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "mes"
+        "campo_origen": "dia_semana"
       }
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "fecha_pago",
+      "tiempoId",
       "año",
+      "mes",
+      "semana",
       "trimestre",
-      "mes"
+      "dia_semana"
     ],
-    "consulta": "select fecha_pago, YEAR(FECHA_PAGO) año,DATEPART(QUARTER,FECHA_PAGO) trimestre,MONTH(FECHA_PAGO) mes from factura group by fecha_pago order by fecha_pago;"
+    "consulta": "SELECT CONVERT(DATE, OrderDate) tiempoId, DATEPART(YEAR, OrderDate) año,  DATEPART(MONTH, OrderDate) mes, DATEPART(WEEK, OrderDate) semana,  DATEPART(QUARTER, OrderDate) trimestre, DATENAME(WEEKDAY, OrderDate) dia_semana FROM Orders  GROUP BY Orders.OrderDate"
   },
   {
     "tipo": "consulta",
     "origen": "seleccione una tabla",
-    "destino": "[HECHOS_REPUESTOS]",
+    "destino": "[Employees]",
     "campos_tabla_olap": [
       {
-        "campo_destino": "codigo",
+        "campo_destino": "EmployeeID",
         "tipo_dato": "int",
         "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "EmployeeID"
+      },
+      {
+        "campo_destino": "Nombre",
+        "tipo_dato": "nvarchar",
+        "longitud": "100",
+        "longitud_maxima": 100,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "Nombre"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "EmployeeID",
+      "Nombre"
+    ],
+    "consulta": "select EmployeeID, CONCAT(FirstName, ' ', LastName) Nombre from Employees"
+  },
+  {
+    "tipo": "tabla",
+    "origen": "[Products]",
+    "destino": "[Products]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "ProductID",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "ProductID"
+      },
+      {
+        "campo_destino": "ProductName",
+        "tipo_dato": "nvarchar",
+        "longitud": "40",
+        "longitud_maxima": 40,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "ProductName"
+      }
+    ],
+    "campos_tabla_oltp": [
+      "ninguno",
+      "ProductID",
+      "ProductName",
+      "SupplierID",
+      "CategoryID",
+      "QuantityPerUnit",
+      "UnitPrice",
+      "UnitsInStock",
+      "UnitsOnOrder",
+      "ReorderLevel",
+      "Discontinued"
+    ],
+    "consulta": "select ProductID, ProductName from [Products];"
+  },
+  {
+    "tipo": "consulta",
+    "origen": "seleccione una tabla",
+    "destino": "[Hechos_Orders]",
+    "campos_tabla_olap": [
+      {
+        "campo_destino": "codigoId",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
         "campo_origen": "ninguno"
       },
       {
-        "campo_destino": "repuestoID",
-        "tipo_dato": "nchar",
-        "longitud": "4",
+        "campo_destino": "EmployeeID",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "REPUESTOID"
+        "campo_origen": "EmployeeID"
       },
       {
-        "campo_destino": "empleadoID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "EMPLEADOID"
-      },
-      {
-        "campo_destino": "modeloID",
-        "tipo_dato": "nchar",
-        "longitud": "5",
-        "modificar": "Normal",
-        "concatenar": "no",
-        "campo_origen": "MODELOID"
-      },
-      {
-        "campo_destino": "tiempoID",
+        "campo_destino": "tiempoId",
         "tipo_dato": "date",
         "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "fecha_pago"
+        "campo_origen": "tiempoId"
       },
       {
-        "campo_destino": "total_repuesto",
-        "tipo_dato": "money",
+        "campo_destino": "ProductID",
+        "tipo_dato": "int",
         "longitud": "0",
+        "longitud_maxima": null,
         "modificar": "Normal",
         "concatenar": "no",
-        "campo_origen": "TOTAL_REPUESTOS"
+        "campo_origen": "ProductID"
+      },
+      {
+        "campo_destino": "ShipVia",
+        "tipo_dato": "int",
+        "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "ShipperID"
+      },
+      {
+        "campo_destino": "total_venta_producto",
+        "tipo_dato": "float",
+        "longitud": "0",
+        "longitud_maxima": null,
+        "modificar": "Normal",
+        "concatenar": "no",
+        "campo_origen": "total_venta_producto"
       }
     ],
     "campos_tabla_oltp": [
       "ninguno",
-      "REPUESTOID",
-      "EMPLEADOID",
-      "MODELOID",
-      "fecha_pago",
-      "TOTAL_REPUESTOS"
+      "EmployeeID",
+      "ShipperID",
+      "tiempoId",
+      "ProductID",
+      "total_venta_producto"
     ],
-    "consulta": "SELECT REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago, SUM(TOTAL_REPUESTO*(1-DESCUENTO)*1.12) TOTAL_REPUESTOS FROM ORDEN_SERVICIO OS INNER JOIN DETALLE_REPUESTO DR ON DR.ordenID = OS.OrdenID  INNER JOIN FACTURA F ON F.ordenID = OS.OrdenID INNER JOIN EMPLEADO E ON E.empleadoID =OS.empleadoID INNER JOIN VEHICULO V ON V.vehiculoID =OS.vehiculoID GROUP BY REPUESTOID, E.EMPLEADOID, v.MODELOID, fecha_pago;"
+    "consulta": "SELECT Orders.EmployeeID, Shippers.ShipperID, CONVERT(DATE,OrderDate) tiempoId,  Products.ProductID,  SUM([Order Details].Quantity*[Order Details].UnitPrice*(1-[Order Details].Discount)) total_venta_producto FROM Orders  INNER JOIN [Order Details] ON Orders.OrderID=[Order Details].OrderID INNER JOIN Shippers ON Orders.ShipVia=Shippers.ShipperID INNER JOIN Products ON Products.ProductID=[Order Details].ProductID GROUP BY Orders.EmployeeID, Shippers.ShipperID, Products.ProductID, OrderDate"
   }
 ]

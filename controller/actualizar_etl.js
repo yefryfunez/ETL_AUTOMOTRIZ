@@ -102,6 +102,7 @@ function buscarETL(destino){
 /* ############################################################################################################################################################# */
 actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
+console.log(respuesta)
 
 
     if(respuesta.Eliminar != undefined){
@@ -113,7 +114,34 @@ actualizar_etl.post = async (req, res) => {
         }
     } 
     
+
+    // ELIMINA EL ETL AL QUE SE LE HA DADO CLICK
+    /* *************************************************************************************************************************************************** */
+    if(respuesta.eliminar_etl != undefined){
+        dbdatos.lista_etl.splice(respuesta.eliminar_etl,1);
+        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        guardar_etl(lista_etl_json)
+    } 
+        // MUEVE HACIA ARRIBA EL ETL AL QUE SE LE HA DADO CLICK
+    /* *************************************************************************************************************************************************** */
+    if(respuesta.subir_etl != undefined){
+        [dbdatos.lista_etl[parseInt(respuesta.subir_etl)-1], dbdatos.lista_etl[parseInt(respuesta.subir_etl)]] = [dbdatos.lista_etl[parseInt(respuesta.subir_etl)], dbdatos.lista_etl[parseInt(respuesta.subir_etl)-1]];
+        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        guardar_etl(lista_etl_json)
+        iniciar()
+    } 
+        // MUEVE HACIA ABAJO EL ETL AL QUE SE LE HA DADO CLICK
+    /* *************************************************************************************************************************************************** */
+    if(respuesta.bajar_etl != undefined){
+        [dbdatos.lista_etl[parseInt(respuesta.bajar_etl)], dbdatos.lista_etl[parseInt(respuesta.bajar_etl)+1]] = [dbdatos.lista_etl[parseInt(respuesta.bajar_etl)+1], dbdatos.lista_etl[parseInt(respuesta.bajar_etl)]];
+        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        guardar_etl(lista_etl_json)
+        iniciar()
+    } 
     
+
+    // MUESTRA LOS DATOS DEL ETL AL QUE SE LE HA DADO CLICK
+    /* *************************************************************************************************************************************************** */
     if(respuesta.etl != undefined){
         constantes.i = buscarETL(respuesta.etl);
         constantes.tipo = dbdatos.lista_etl[constantes.i].tipo;
@@ -125,10 +153,29 @@ actualizar_etl.post = async (req, res) => {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //UNA VEZ SELECCIONADA LA TABLA O CONSULTA PARA OBTENER LOS DATOS DE LA BASE DE DATOS ORIGEN
     /* *************************************************************************************************************************************************** */
     if(respuesta.tipo != undefined) {
-        if(constantes.tipo != respuesta.tipo) iniciar();
+        var i = constantes.i;
+        iniciar();
+        constantes.i = i;
         constantes.tipo = respuesta.tipo;
     };
 

@@ -3,10 +3,10 @@
 
 <%-include ('plantillas/navbar') %>
 
-<table class="table" style="max-width: 1250px; align-items: flex-start;">
+<table class="table" style="max-width: 1250px; align-items: flex-start; ">
   <tbody>
     <tr>
-      <td>
+      <td style="text-align: left">
 
 
 
@@ -45,10 +45,28 @@
               <hr>
             </thead>
             <tbody>
-              <% dbdatos.lista_etl.forEach(elemento => { %>
+              <% dbdatos.lista_etl.forEach((elemento, index) => { %>
                   <tr>
                         <td>
                           <button name="etl" type="submit" onclick="this.form.submit()" value="<%=elemento.destino%>"><%=elemento.destino%></button>
+                        </td>
+                        <td>
+                          <button style="background-color: #ac1400; color: #fff; padding: 3px 7px; border: none; border-radius: 4px; cursor: pointer; margin: 8px;" 
+                                          name="eliminar_etl" type="submit" onclick="this.form.submit()" value=<%=index%>>eliminar</button>
+                        </td>
+                        <td>
+                          <% if (index > 0) { %>
+                              <button name="subir_etl" type="submit" onclick="this.form.submit()" value=<%=index%>>subir</button>
+                          <% } else { %>
+                            <button disabled>subir</button>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (index != (dbdatos.lista_etl.length - 1)) { %>
+                              <button name="bajar_etl" type="submit" onclick="this.form.submit()" value=<%=index%>>bajar</button>
+                          <% } else { %>
+                            <button disabled>bajar</button>
+                          <% } %>
                         </td>
                   </tr>
               <% }) %>
