@@ -1,0 +1,472 @@
+{
+  "config": {
+    "user": "sa",
+    "password": "yefry",
+    "server": "localhost",
+    "trustServerCertificate": true,
+    "encrypt": false
+  },
+  "proyecto": "ETL_NORTHWIND",
+  "lista_etl": [
+    {
+      "tipo": "tabla",
+      "origen": "[Products]",
+      "destino": "[Products]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "ProductID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ProductID"
+        },
+        {
+          "campo_destino": "ProductName",
+          "tipo_dato": "nvarchar",
+          "longitud": "40",
+          "longitud_maxima": 40,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ProductName"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "ProductID",
+        "ProductName",
+        "SupplierID",
+        "CategoryID",
+        "QuantityPerUnit",
+        "UnitPrice",
+        "UnitsInStock",
+        "UnitsOnOrder",
+        "ReorderLevel",
+        "Discontinued"
+      ],
+      "consulta": "select ProductID, ProductName from [Products];"
+    },
+    {
+      "tipo": "tabla",
+      "origen": "[Shippers]",
+      "destino": "[Shippers]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "ShipperID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ShipperID"
+        },
+        {
+          "campo_destino": "CompanyName",
+          "tipo_dato": "nvarchar",
+          "longitud": "40",
+          "longitud_maxima": 40,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "CompanyName"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "ShipperID",
+        "CompanyName",
+        "Phone"
+      ],
+      "consulta": "select ShipperID, CompanyName from [Shippers];"
+    },
+    {
+      "tipo": "consulta",
+      "origen": "seleccione una tabla",
+      "destino": "[Employees]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "EmployeeID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "EmployeeID"
+        },
+        {
+          "campo_destino": "Nombre",
+          "tipo_dato": "nvarchar",
+          "longitud": "100",
+          "longitud_maxima": 100,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "Nombre"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "EmployeeID",
+        "Nombre"
+      ],
+      "consulta": "select EmployeeID, CONCAT(FirstName, ' ', LastName) Nombre from Employees"
+    },
+    {
+      "tipo": "consulta",
+      "origen": "seleccione una tabla",
+      "destino": "[tblTiempo]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "tiempoId",
+          "tipo_dato": "date",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "tiempoId"
+        },
+        {
+          "campo_destino": "año",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "año"
+        },
+        {
+          "campo_destino": "mes",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "mes"
+        },
+        {
+          "campo_destino": "semana",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "semana"
+        },
+        {
+          "campo_destino": "trimestre",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "trimestre"
+        },
+        {
+          "campo_destino": "diaDeSemana",
+          "tipo_dato": "varchar",
+          "longitud": "20",
+          "longitud_maxima": 20,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "dia_semana"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "tiempoId",
+        "año",
+        "mes",
+        "semana",
+        "trimestre",
+        "dia_semana"
+      ],
+      "consulta": "SELECT CONVERT(DATE, OrderDate) tiempoId, DATEPART(YEAR, OrderDate) año,  DATEPART(MONTH, OrderDate) mes, DATEPART(WEEK, OrderDate) semana,  DATEPART(QUARTER, OrderDate) trimestre, DATENAME(WEEKDAY, OrderDate) dia_semana FROM Orders  GROUP BY Orders.OrderDate"
+    },
+    {
+      "tipo": "consulta",
+      "origen": "seleccione una tabla",
+      "destino": "[Hechos_Orders]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "codigoId",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ninguno"
+        },
+        {
+          "campo_destino": "EmployeeID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "EmployeeID"
+        },
+        {
+          "campo_destino": "tiempoId",
+          "tipo_dato": "date",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "tiempoId"
+        },
+        {
+          "campo_destino": "ProductID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ProductID"
+        },
+        {
+          "campo_destino": "ShipVia",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ShipperID"
+        },
+        {
+          "campo_destino": "total_venta_producto",
+          "tipo_dato": "float",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "total_venta_producto"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "EmployeeID",
+        "ShipperID",
+        "tiempoId",
+        "ProductID",
+        "total_venta_producto"
+      ],
+      "consulta": "SELECT Orders.EmployeeID, Shippers.ShipperID, CONVERT(DATE,OrderDate) tiempoId,  Products.ProductID,  SUM([Order Details].Quantity*[Order Details].UnitPrice*(1-[Order Details].Discount)) total_venta_producto FROM Orders  INNER JOIN [Order Details] ON Orders.OrderID=[Order Details].OrderID INNER JOIN Shippers ON Orders.ShipVia=Shippers.ShipperID INNER JOIN Products ON Products.ProductID=[Order Details].ProductID GROUP BY Orders.EmployeeID, Shippers.ShipperID, Products.ProductID, OrderDate"
+    }
+  ],
+  "databases": {
+    "origen": "NORTHWND",
+    "destino": "DW_NORTHWIND"
+  },
+  "tablas_origen": [
+    {
+      "table_name": "Orders"
+    },
+    {
+      "table_name": "Products"
+    },
+    {
+      "table_name": "Order Details"
+    },
+    {
+      "table_name": "Customer and Suppliers by City"
+    },
+    {
+      "table_name": "Alphabetical list of products"
+    },
+    {
+      "table_name": "Current Product List"
+    },
+    {
+      "table_name": "Orders Qry"
+    },
+    {
+      "table_name": "Products Above Average Price"
+    },
+    {
+      "table_name": "Products by Category"
+    },
+    {
+      "table_name": "Quarterly Orders"
+    },
+    {
+      "table_name": "Invoices"
+    },
+    {
+      "table_name": "Order Details Extended"
+    },
+    {
+      "table_name": "Order Subtotals"
+    },
+    {
+      "table_name": "Product Sales for 1997"
+    },
+    {
+      "table_name": "Category Sales for 1997"
+    },
+    {
+      "table_name": "Sales by Category"
+    },
+    {
+      "table_name": "Sales Totals by Amount"
+    },
+    {
+      "table_name": "Summary of Sales by Quarter"
+    },
+    {
+      "table_name": "Summary of Sales by Year"
+    },
+    {
+      "table_name": "CustomerCustomerDemo"
+    },
+    {
+      "table_name": "CustomerDemographics"
+    },
+    {
+      "table_name": "Region"
+    },
+    {
+      "table_name": "Territories"
+    },
+    {
+      "table_name": "EmployeeTerritories"
+    },
+    {
+      "table_name": "sysdiagrams"
+    },
+    {
+      "table_name": "Employees"
+    },
+    {
+      "table_name": "Categories"
+    },
+    {
+      "table_name": "Customers"
+    },
+    {
+      "table_name": "Shippers"
+    },
+    {
+      "table_name": "Suppliers"
+    }
+  ],
+  "tablas_destino": [
+    {
+      "table_name": "Employees"
+    },
+    {
+      "table_name": "Hechos_Orders"
+    },
+    {
+      "table_name": "Products"
+    },
+    {
+      "table_name": "Shippers"
+    },
+    {
+      "table_name": "tblTiempo"
+    }
+  ],
+  "tipo_de_dato": [
+    {
+      "tipo_dato": "bigint"
+    },
+    {
+      "tipo_dato": "binary"
+    },
+    {
+      "tipo_dato": "bit"
+    },
+    {
+      "tipo_dato": "char"
+    },
+    {
+      "tipo_dato": "date"
+    },
+    {
+      "tipo_dato": "datetime"
+    },
+    {
+      "tipo_dato": "datetime2"
+    },
+    {
+      "tipo_dato": "datetimeoffset"
+    },
+    {
+      "tipo_dato": "decimal"
+    },
+    {
+      "tipo_dato": "float"
+    },
+    {
+      "tipo_dato": "geography"
+    },
+    {
+      "tipo_dato": "geometry"
+    },
+    {
+      "tipo_dato": "hierarchyid"
+    },
+    {
+      "tipo_dato": "image"
+    },
+    {
+      "tipo_dato": "int"
+    },
+    {
+      "tipo_dato": "money"
+    },
+    {
+      "tipo_dato": "nchar"
+    },
+    {
+      "tipo_dato": "ntext"
+    },
+    {
+      "tipo_dato": "numeric"
+    },
+    {
+      "tipo_dato": "nvarchar"
+    },
+    {
+      "tipo_dato": "real"
+    },
+    {
+      "tipo_dato": "smalldatetime"
+    },
+    {
+      "tipo_dato": "smallint"
+    },
+    {
+      "tipo_dato": "smallmoney"
+    },
+    {
+      "tipo_dato": "sql_variant"
+    },
+    {
+      "tipo_dato": "sysname"
+    },
+    {
+      "tipo_dato": "text"
+    },
+    {
+      "tipo_dato": "time"
+    },
+    {
+      "tipo_dato": "timestamp"
+    },
+    {
+      "tipo_dato": "tinyint"
+    },
+    {
+      "tipo_dato": "uniqueidentifier"
+    },
+    {
+      "tipo_dato": "varbinary"
+    },
+    {
+      "tipo_dato": "varchar"
+    },
+    {
+      "tipo_dato": "xml"
+    }
+  ]
+}

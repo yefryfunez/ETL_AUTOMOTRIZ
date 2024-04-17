@@ -65,7 +65,7 @@ ejecutar_etl.post = async (req, res) => {
                     
                     
                     /* ********************************************** limpiar tablas del data warehouse ************************************************************ */
-                    await pool.request().query(`use ${dbdatos.databases.destino}; EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'; EXEC sp_MSForEachTable 'DELETE FROM ?'; EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL';`)
+                    await pool.request().query(`use ${dbdatos.databases.destino}; EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'; EXEC sp_MSForEachTable 'DELETE FROM ?'; EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; `)
                     
 
 

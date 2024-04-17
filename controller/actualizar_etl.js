@@ -1,34 +1,36 @@
-const dbdatos = require('../conexion');
+let dbdatos = require('../conexion');
 const actualizar_etl = {};
 const fs = require('fs');
 const path = require('path');
 
 
 function guardar_etl(data){
-    fs.writeFile(path.join(__dirname,'datos_etl.txt'), data, (err)=>{
+    fs.writeFile(path.join(__dirname, '..', 'public', 'proyectos', dbdatos.proyecto+'.txt'), data, (err)=>{
         if(err){
             console.log('Ocurio un error: \n', err)
         }else{
-            console.log('ETL Actualizado exitosamente')
+            console.log('ETL guardado exitosamente')
         }
     })
 }
 
-function leer_etl(){
-    fs.readFile(path.join(__dirname, 'datos_etl.txt'), 'utf8',(err, data)=>{
+function leer_datos(){
+    fs.readFile(path.join(__dirname, '..', 'public', 'proyectos', dbdatos.proyecto+'.txt'), 'utf8',(err, data)=>{
          if(err) {
             console.log('Ocurrio el siguiente error al leer el archivo: \n', err)
          }
          try {
-            const arreg = JSON.parse(data);
-            arreg.forEach(elemento => {
-                dbdatos.lista_etl.push(elemento)
-            })
-
-            console.log(dbdatos.lista_etl);
+            const dbdatoss = JSON.parse(data);
+            dbdatos.config = dbdatoss.config;
+            dbdatos.proyecto = dbdatoss.proyecto;
+            dbdatos.lista_etl = dbdatoss.lista_etl;
+            dbdatos.tablas_origen =  dbdatoss.tablas_origen;
+            dbdatos.tablas_destino = dbdatoss.tablas_destino;
+            dbdatos.tipo_de_dato = dbdatoss.tipo_de_dato;
+            dbdatos.databases = dbdatoss.databases
          } catch (error) {
-            const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
-            guardar_etl(lista_etl_json);
+            data = JSON.stringify(dbdatos, null , 2);
+            guardar_etl(data);
          }
     })
 }
@@ -72,7 +74,7 @@ function  iniciar () {
 
 /*  ======================================================== METODO GET ===============================================================*/
 actualizar_etl.get = (req, res) => {
-    if(dbdatos.lista_etl.length === 0) leer_etl();
+    if(dbdatos.lista_etl.length === 0) leer_datos();
     iniciar();
     res.render('actualizar_etl',{
         dbdatos,
@@ -108,7 +110,7 @@ console.log(respuesta)
     if(respuesta.Eliminar != undefined){
         if(respuesta.Eliminar === 'Eliminar'){
             dbdatos.lista_etl.splice(0,dbdatos.lista_etl.length);
-            const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+            const lista_etl_json = JSON.stringify(dbdatos, null , 2);
             guardar_etl(lista_etl_json)
             
         }
@@ -119,14 +121,14 @@ console.log(respuesta)
     /* *************************************************************************************************************************************************** */
     if(respuesta.eliminar_etl != undefined){
         dbdatos.lista_etl.splice(respuesta.eliminar_etl,1);
-        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        const lista_etl_json = JSON.stringify(dbdatos, null , 2);
         guardar_etl(lista_etl_json)
     } 
         // MUEVE HACIA ARRIBA EL ETL AL QUE SE LE HA DADO CLICK
     /* *************************************************************************************************************************************************** */
     if(respuesta.subir_etl != undefined){
         [dbdatos.lista_etl[parseInt(respuesta.subir_etl)-1], dbdatos.lista_etl[parseInt(respuesta.subir_etl)]] = [dbdatos.lista_etl[parseInt(respuesta.subir_etl)], dbdatos.lista_etl[parseInt(respuesta.subir_etl)-1]];
-        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        const lista_etl_json = JSON.stringify(dbdatos, null , 2);
         guardar_etl(lista_etl_json)
         iniciar()
     } 
@@ -134,7 +136,7 @@ console.log(respuesta)
     /* *************************************************************************************************************************************************** */
     if(respuesta.bajar_etl != undefined){
         [dbdatos.lista_etl[parseInt(respuesta.bajar_etl)], dbdatos.lista_etl[parseInt(respuesta.bajar_etl)+1]] = [dbdatos.lista_etl[parseInt(respuesta.bajar_etl)+1], dbdatos.lista_etl[parseInt(respuesta.bajar_etl)]];
-        const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
+        const lista_etl_json = JSON.stringify(dbdatos, null , 2);
         guardar_etl(lista_etl_json)
         iniciar()
     } 
@@ -303,8 +305,8 @@ console.log(respuesta)
                                     dbdatos.lista_etl[constantes.i].campos_tabla_oltp = constantes.campos_tabla_oltp;
                                     dbdatos.lista_etl[constantes.i].consulta = constantes.consulta;
 
-                                    const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
-                                    guardar_etl(lista_etl_json)
+                                    const datos = JSON.stringify(dbdatos, null , 2);
+                                    guardar_etl(datos)
                                 }
 
                                 iniciar();

@@ -1,0 +1,373 @@
+{
+  "config": {
+    "user": "sa",
+    "password": "yefry",
+    "server": "localhost",
+    "trustServerCertificate": true,
+    "encrypt": false
+  },
+  "proyecto": "ETL_automotriz",
+  "lista_etl": [
+    {
+      "tipo": "tabla",
+      "origen": "[SUCURSAL]",
+      "destino": "[SUCURSAL]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "sucursalID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "sucursalID"
+        },
+        {
+          "campo_destino": "nombre_sucursal",
+          "tipo_dato": "nvarchar",
+          "longitud": "100",
+          "longitud_maxima": 100,
+          "modificar": "Mayuscula",
+          "concatenar": "no",
+          "campo_origen": "Nom_sucursal"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "sucursalID",
+        "Nom_sucursal"
+      ],
+      "consulta": "select sucursalID, Nom_sucursal from [SUCURSAL];"
+    },
+    {
+      "tipo": "tabla",
+      "origen": "[EMPLEADO]",
+      "destino": "[EMPLEADO]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "empleadoID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "empleadoID"
+        },
+        {
+          "campo_destino": "nombre_empleado",
+          "tipo_dato": "nvarchar",
+          "longitud": "102",
+          "longitud_maxima": 102,
+          "modificar": "Normal",
+          "concatenar": "si",
+          "campo_origen": [
+            "P_nombre",
+            "S_nombre"
+          ]
+        },
+        {
+          "campo_destino": "sucursalID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "sucursalID"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "empleadoID",
+        "P_nombre",
+        "S_nombre",
+        "P_apellido",
+        "S_apellido",
+        "cargoID",
+        "sueldo",
+        "horas_extras",
+        "fecha_ingreso",
+        "fecha_nacimiento",
+        "sucursalID"
+      ],
+      "consulta": "select empleadoID, P_nombre, S_nombre, sucursalID from [EMPLEADO];"
+    },
+    {
+      "tipo": "tabla",
+      "origen": "[MARCA]",
+      "destino": "[MARCA]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "marcaID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "marcaID"
+        },
+        {
+          "campo_destino": "nombre_marca",
+          "tipo_dato": "nvarchar",
+          "longitud": "30",
+          "longitud_maxima": 30,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "nombre_Marca"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "marcaID",
+        "nombre_Marca",
+        "pais_origen"
+      ],
+      "consulta": "select marcaID, nombre_Marca from [MARCA];"
+    },
+    {
+      "tipo": "tabla",
+      "origen": "[MODELO]",
+      "destino": "[MODELO]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "modeloID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "modeloID"
+        },
+        {
+          "campo_destino": "nombre_modelo",
+          "tipo_dato": "nvarchar",
+          "longitud": "150",
+          "longitud_maxima": 150,
+          "modificar": "Mayuscula",
+          "concatenar": "no",
+          "campo_origen": "nombre_Modelo"
+        },
+        {
+          "campo_destino": "marcaID",
+          "tipo_dato": "nchar",
+          "longitud": "5",
+          "longitud_maxima": 5,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "marcaID"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "modeloID",
+        "nombre_Modelo",
+        "marcaID"
+      ],
+      "consulta": "select modeloID, nombre_Modelo, marcaID from [MODELO];"
+    }
+  ],
+  "databases": {
+    "origen": "automotriz",
+    "destino": "DW_automotriz"
+  },
+  "tablas_origen": [
+    {
+      "table_name": "CARGO"
+    },
+    {
+      "table_name": "CLIENTE"
+    },
+    {
+      "table_name": "COLOR"
+    },
+    {
+      "table_name": "DESCUENTO"
+    },
+    {
+      "table_name": "DETALLE_LUBRICANTE"
+    },
+    {
+      "table_name": "DETALLE_MANO_OBRA"
+    },
+    {
+      "table_name": "DETALLE_REPUESTO"
+    },
+    {
+      "table_name": "EMPLEADO"
+    },
+    {
+      "table_name": "FACTURA"
+    },
+    {
+      "table_name": "FORMA_PAGO"
+    },
+    {
+      "table_name": "LUBRICANTE"
+    },
+    {
+      "table_name": "MANO_OBRA"
+    },
+    {
+      "table_name": "MARCA"
+    },
+    {
+      "table_name": "MODELO"
+    },
+    {
+      "table_name": "MUNICIPIO"
+    },
+    {
+      "table_name": "ORDEN_SERVICIO"
+    },
+    {
+      "table_name": "PROVEEDOR"
+    },
+    {
+      "table_name": "REPUESTO"
+    },
+    {
+      "table_name": "SUCURSAL"
+    },
+    {
+      "table_name": "TIPO"
+    },
+    {
+      "table_name": "TIPO_COMBUSTIBLE"
+    },
+    {
+      "table_name": "TIPO_SERVICIO"
+    },
+    {
+      "table_name": "VEHICULO"
+    }
+  ],
+  "tablas_destino": [
+    {
+      "table_name": "HECHOS_REPUESTOS"
+    },
+    {
+      "table_name": "MARCA"
+    },
+    {
+      "table_name": "SUCURSAL"
+    },
+    {
+      "table_name": "EMPLEADO"
+    },
+    {
+      "table_name": "TIEMPO"
+    },
+    {
+      "table_name": "REPUESTO"
+    },
+    {
+      "table_name": "sysdiagrams"
+    },
+    {
+      "table_name": "MODELO"
+    }
+  ],
+  "tipo_de_dato": [
+    {
+      "tipo_dato": "bigint"
+    },
+    {
+      "tipo_dato": "binary"
+    },
+    {
+      "tipo_dato": "bit"
+    },
+    {
+      "tipo_dato": "char"
+    },
+    {
+      "tipo_dato": "date"
+    },
+    {
+      "tipo_dato": "datetime"
+    },
+    {
+      "tipo_dato": "datetime2"
+    },
+    {
+      "tipo_dato": "datetimeoffset"
+    },
+    {
+      "tipo_dato": "decimal"
+    },
+    {
+      "tipo_dato": "float"
+    },
+    {
+      "tipo_dato": "geography"
+    },
+    {
+      "tipo_dato": "geometry"
+    },
+    {
+      "tipo_dato": "hierarchyid"
+    },
+    {
+      "tipo_dato": "image"
+    },
+    {
+      "tipo_dato": "int"
+    },
+    {
+      "tipo_dato": "money"
+    },
+    {
+      "tipo_dato": "nchar"
+    },
+    {
+      "tipo_dato": "ntext"
+    },
+    {
+      "tipo_dato": "numeric"
+    },
+    {
+      "tipo_dato": "nvarchar"
+    },
+    {
+      "tipo_dato": "real"
+    },
+    {
+      "tipo_dato": "smalldatetime"
+    },
+    {
+      "tipo_dato": "smallint"
+    },
+    {
+      "tipo_dato": "smallmoney"
+    },
+    {
+      "tipo_dato": "sql_variant"
+    },
+    {
+      "tipo_dato": "sysname"
+    },
+    {
+      "tipo_dato": "text"
+    },
+    {
+      "tipo_dato": "time"
+    },
+    {
+      "tipo_dato": "timestamp"
+    },
+    {
+      "tipo_dato": "tinyint"
+    },
+    {
+      "tipo_dato": "uniqueidentifier"
+    },
+    {
+      "tipo_dato": "varbinary"
+    },
+    {
+      "tipo_dato": "varchar"
+    },
+    {
+      "tipo_dato": "xml"
+    }
+  ]
+}

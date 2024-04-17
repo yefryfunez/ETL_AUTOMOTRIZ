@@ -6,9 +6,12 @@
 
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Proyectos</a>
+            </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Credenciales</a>
+            <a class="nav-link active" aria-current="page" href="/nuevo_proyecto">Nuevo proyecto</a>
           </li>
         </ul>
       </div>
@@ -23,6 +26,10 @@
             <form action="/guardar_credenciales" method="post">
                 <% if (dbdatos.config.server == undefined) { %>
                     <div class="form-group">
+                        <label for="proyecto">Nombre del proyecto:</label>
+                        <input type="text" id="proyecto" name="proyecto" required >
+                    </div>
+                    <div class="form-group">
                         <label for="server">server:</label>
                         <input type="text" id="server" name="server" required value="localhost">
                     </div>
@@ -36,26 +43,30 @@
                     </div>
                     <div class="form-group">
                         <label for="oltp">base de datos origen (OLTP):</label>
-                        <input type="text" id="oltp" name="origen" required value="NORTHWND" >
+                        <input type="text" id="oltp" name="origen" required >
                     </div>
                     <div class="form-group">
                         <label for="olap">base de datos destino (OLAP):</label>
-                        <input type="text" id="olap" name="destino" required value="DW_NORTHWIND">
+                        <input type="text" id="olap" name="destino" required >
                     </div>
 
 
                 <% } else { %>
                     <div class="form-group">
+                        <label for="proyecto">Nombre del proyecto:</label>
+                        <input type="text" id="proyecto" name="proyecto" required value="<%=dbdatos.proyecto %>">
+                    </div>
+                    <div class="form-group">
                         <label for="server">server:</label>
-                        <input type="text" id="server" name="server" required value=<%=dbdatos.config.server %>>
+                        <input type="text" id="server" name="server" required value="<%=dbdatos.config.server %>">
                     </div>
                     <div class="form-group">
                         <label for="user">user:</label>
-                        <input type="text" id="user" name="user" required value=<%=dbdatos.config.user %>>
+                        <input type="text" id="user" name="user" required value="<%=dbdatos.config.user %>">
                     </div>
                     <div class="form-group">
                         <label for="password">password:</label>
-                        <input type="password" id="password" name="password" required value=<%=dbdatos.config.password %>>
+                        <input type="password" id="password" name="password" required value="<%=dbdatos.config.password %>">
                     </div>
                     <div class="form-group">
                         <label for="oltp">base de datos origen (OLTP):</label>

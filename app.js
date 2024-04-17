@@ -6,8 +6,6 @@ const rutas = require('./routes/rutas');
 
 
 
-
-
 //configuraciones
 app.set('port', 3000);
 app.set('view engine', 'ejs');
@@ -25,6 +23,9 @@ app.use(express.urlencoded({extended: true}))
 
 //routes
 app.use('/', rutas);
+app.use('/obtener_proyecto', rutas);
+
+app.use('/nuevo_proyecto', rutas);
 app.use('/guardar_credenciales', rutas);
  
 app.use('/etlget', rutas);
@@ -35,6 +36,7 @@ app.use('/actualizar_etl', rutas);
 
 app.use('/ejecutar_etl', rutas);
 app.use('/ejecutar_etl_p', rutas);
+
 
 
 app.use((req, res) => {

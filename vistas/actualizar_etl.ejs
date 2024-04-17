@@ -12,6 +12,7 @@
 
 
 <div class="container" style="padding: 20px;max-width: 450px"> 
+  <h4 style="align-content: center;">PROYECTO: <%=dbdatos.proyecto%></h4>
   <table class="table">
     <tbody>
       <tr>
@@ -194,7 +195,7 @@
                       <!--                                                  SELECCIONAR EL TIPO DE DATO -->
                       <!-- ================================================================================================================================ -->
                       <td>
-                        <select style="margin-bottom: 0px; padding: 3px;" name="tipo_dato" id="tipo_dato" >
+                        <select style="margin-bottom: 0px; padding: 3px;" name="tipo_dato" id="tipo_dato" onchange="this.form.submit()">
                           <option  selected value=<%=elemento.tipo_dato %>><%=elemento.tipo_dato %></option>
                           <% dbdatos.tipo_de_dato.forEach(elemento1 => { %>
                             <option value=<%=elemento1.tipo_dato %>><%=elemento1.tipo_dato %></option>

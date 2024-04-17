@@ -1,11 +1,11 @@
-const dbdatos = require('../conexion');
+let dbdatos = require('../conexion');
 const etl = {};
 const fs = require('fs');
 const path = require('path');
 
 
 function guardar_etl(data){
-    fs.writeFile(path.join(__dirname,'datos_etl.txt'), data, (err)=>{
+    fs.writeFile(path.join(__dirname, '..', 'public', 'proyectos', dbdatos.proyecto+'.txt'), data, (err)=>{
         if(err){
             console.log('Ocurio un error: \n', err)
         }else{
@@ -14,22 +14,23 @@ function guardar_etl(data){
     })
 }
 
-function leer_etl(){
-    fs.readFile(path.join(__dirname, 'datos_etl.txt'), 'utf8',(err, data)=>{
+function leer_datos(){
+    fs.readFile(path.join(__dirname, '..', 'public', 'proyectos', dbdatos.proyecto+'.txt'), 'utf8',(err, data)=>{
          if(err) {
             console.log('Ocurrio el siguiente error al leer el archivo: \n', err)
          }
          try {
-            const arreg = JSON.parse(data);
-            arreg.forEach(elemento => {
-                dbdatos.lista_etl.push(elemento)
-            })
-            
-            //console.log(arreg);
+            const dbdatoss = JSON.parse(data);
+            dbdatos.config = dbdatoss.config;
+            dbdatos.proyecto = dbdatoss.proyecto;
+            dbdatos.lista_etl = dbdatoss.lista_etl;
+            dbdatos.tablas_origen =  dbdatoss.tablas_origen;
+            dbdatos.tablas_destino = dbdatoss.tablas_destino;
+            dbdatos.tipo_de_dato = dbdatoss.tipo_de_dato;
+            dbdatos.databases = dbdatoss.databases
          } catch (error) {
-            const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
-            guardar_etl(lista_etl_json);
-
+            data = JSON.stringify(dbdatos, null , 2);
+            guardar_etl(data);
          }
     })
 }
@@ -72,8 +73,8 @@ function  iniciar () {
 
 /*  ======================================================== METODO GET ===============================================================*/
 etl.get = (req, res) => {
-    
-    if(dbdatos.lista_etl.length === 0) leer_etl();
+    console.log('respuesta obtenida. ',dbdatos)
+    if(dbdatos.lista_etl.length === 0) leer_datos();
     iniciar();
     res.render('guardar_etl',{
         dbdatos,
@@ -244,8 +245,8 @@ etl.post = async (req, res) => {
                                         }
 
                                     )
-                                    const lista_etl_json = JSON.stringify(dbdatos.lista_etl, null , 2);
-                                    guardar_etl(lista_etl_json)
+                                    const datos = JSON.stringify(dbdatos, null , 2);
+                                    guardar_etl(datos)
                                 }
 
                                 iniciar();
