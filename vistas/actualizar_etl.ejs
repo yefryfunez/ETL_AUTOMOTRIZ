@@ -16,19 +16,16 @@
   <table class="table">
     <tbody>
       <tr>
-          <td>
-            <form action="/actualizar_etl" method="post">
-              <input style="margin: 0px;" type="submit" name="Eliminar" value="Eliminar">
-            </form>
-          </td>
-          <td>
-            <form action="/ejecutar_etl" method="get">
-              <input style="margin: 0px;" type="submit" name="ejecutar" value="ejecutar">
-            </form>
-          </td>
+  <!-- ========================================== boton para agregar un nuevo ETL ================================================= -->
           <td>
             <form action="/etlget" method="get">
               <input  style="margin: 0px;" type="submit"  value="agregar ETL">
+            </form>
+          </td>
+  <!-- ========================================== boton para ejecutar el ETL ================================================= -->
+          <td>
+            <form action="/ejecutar_etl" method="get">
+              <input style="margin: 0px;" type="submit" name="ejecutar" value="ejecutar">
             </form>
           </td>
       </tr>

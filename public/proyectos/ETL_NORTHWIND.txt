@@ -9,8 +9,8 @@
   "proyecto": "ETL_NORTHWIND",
   "lista_etl": [
     {
-      "tipo": "tabla",
-      "origen": "[Products]",
+      "tipo": "consulta",
+      "origen": "seleccione una tabla",
       "destino": "[Products]",
       "campos_tabla_olap": [
         {
@@ -45,7 +45,7 @@
         "ReorderLevel",
         "Discontinued"
       ],
-      "consulta": "select ProductID, ProductName from [Products];"
+      "consulta": "select * from products;"
     },
     {
       "tipo": "tabla",

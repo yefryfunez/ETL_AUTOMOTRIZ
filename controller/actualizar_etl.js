@@ -104,18 +104,10 @@ function buscarETL(destino){
 /* ############################################################################################################################################################# */
 actualizar_etl.post = async (req, res) => {
     const respuesta = req.body;
-console.log(respuesta)
 
 
-    if(respuesta.Eliminar != undefined){
-        if(respuesta.Eliminar === 'Eliminar'){
-            dbdatos.lista_etl.splice(0,dbdatos.lista_etl.length);
-            const lista_etl_json = JSON.stringify(dbdatos, null , 2);
-            guardar_etl(lista_etl_json)
-            
-        }
-    } 
-    
+
+
 
     // ELIMINA EL ETL AL QUE SE LE HA DADO CLICK
     /* *************************************************************************************************************************************************** */
@@ -285,7 +277,6 @@ console.log(respuesta)
                                                                             constantes.campos_tabla_olap[i].modificar = respuesta.modificar[i];
                                                                             constantes.campos_tabla_olap[i].campo_origen = respuesta.campo_origen[i];
                                                         }
-                                                        //console.log(constantes.campos_tabla_olap);
                                                     }
                                         }
                             }
