@@ -11,18 +11,22 @@ let mensaje = '_';
 
 /*  =============================================== recuperar datos de archivo ===============================================================*/
 function obtener_proyectos(){
-    var ruta = path.join(__dirname,'..','public', 'proyectos')
-    lista_proyectos = fs.readdirSync(ruta);
+    try {
+        if (!fs.existsSync(path.join(__dirname, '..', 'public','proyectos'))) {
+            fs.mkdirSync(path.join(__dirname, '..', 'public','proyectos'));
+        }
+        var ruta = path.join(__dirname,'..','public', 'proyectos')
+        lista_proyectos = fs.readdirSync(ruta);
+    } catch (error) {
+        
+    }
+    
 }
 
 
 function obtener_proyecto(nombre_proyecto){
     
     try {
-
-        if (!fs.existsSync(path.join(__dirname, '..', 'public','proyectos'))) {
-            fs.mkdirSync(path.join(__dirname, '..', 'public','proyectos'));
-        }
 
         const data = fs.readFileSync(path.join(__dirname, '..', 'public', 'proyectos', nombre_proyecto),'utf8');
         const dbdatoss = JSON.parse(data);
