@@ -17,6 +17,38 @@
   "lista_etl": [
     {
       "tipo": "tabla",
+      "origen": "[Shippers]",
+      "destino": "[Shippers]",
+      "campos_tabla_olap": [
+        {
+          "campo_destino": "ShipperID",
+          "tipo_dato": "int",
+          "longitud": "0",
+          "longitud_maxima": null,
+          "modificar": "Normal",
+          "concatenar": "no",
+          "campo_origen": "ShipperID"
+        },
+        {
+          "campo_destino": "CompanyName",
+          "tipo_dato": "nvarchar",
+          "longitud": "40",
+          "longitud_maxima": 40,
+          "modificar": "Mayuscula",
+          "concatenar": "no",
+          "campo_origen": "CompanyName"
+        }
+      ],
+      "campos_tabla_oltp": [
+        "ninguno",
+        "ShipperID",
+        "CompanyName",
+        "Phone"
+      ],
+      "consulta": "select ShipperID, CompanyName from [Shippers];"
+    },
+    {
+      "tipo": "tabla",
       "origen": "[Products]",
       "destino": "[Products]",
       "campos_tabla_olap": [
@@ -56,38 +88,6 @@
     },
     {
       "tipo": "tabla",
-      "origen": "[Shippers]",
-      "destino": "[Shippers]",
-      "campos_tabla_olap": [
-        {
-          "campo_destino": "ShipperID",
-          "tipo_dato": "int",
-          "longitud": "0",
-          "longitud_maxima": null,
-          "modificar": "Normal",
-          "concatenar": "no",
-          "campo_origen": "ShipperID"
-        },
-        {
-          "campo_destino": "CompanyName",
-          "tipo_dato": "nvarchar",
-          "longitud": "40",
-          "longitud_maxima": 40,
-          "modificar": "Normal",
-          "concatenar": "no",
-          "campo_origen": "CompanyName"
-        }
-      ],
-      "campos_tabla_oltp": [
-        "ninguno",
-        "ShipperID",
-        "CompanyName",
-        "Phone"
-      ],
-      "consulta": "select ShipperID, CompanyName from [Shippers];"
-    },
-    {
-      "tipo": "tabla",
       "origen": "[Employees]",
       "destino": "[Employees]",
       "campos_tabla_olap": [
@@ -105,7 +105,7 @@
           "tipo_dato": "nvarchar",
           "longitud": "100",
           "longitud_maxima": 100,
-          "modificar": "Normal",
+          "modificar": "Mayuscula",
           "concatenar": "si",
           "campo_origen": [
             "LastName",

@@ -2,5 +2,6 @@
 
 ## ejecutar el comando -> npm init -y
 ## luego ejecutar el comando ->  npm install
+## luego ejecutar el comando ->  npm install nodemon -g
 ## luego el comando -> nodemon app
 ## luego acceder desde el navegador a ->  http://localhost:3000/
