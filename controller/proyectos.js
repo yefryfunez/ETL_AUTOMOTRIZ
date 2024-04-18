@@ -19,6 +19,11 @@ function obtener_proyectos(){
 function obtener_proyecto(nombre_proyecto){
     
     try {
+
+        if (!fs.existsSync(path.join(__dirname, '..', 'public','proyectos'))) {
+            fs.mkdirSync(path.join(__dirname, '..', 'public','proyectos'));
+        }
+
         const data = fs.readFileSync(path.join(__dirname, '..', 'public', 'proyectos', nombre_proyecto),'utf8');
         const dbdatoss = JSON.parse(data);
         dbdatos.config_origen = dbdatoss.config_origen;
