@@ -1,4 +1,3 @@
 node_modules
 
-public/proyectos/*.txt
-public/*.txt
+public/proyectos/
