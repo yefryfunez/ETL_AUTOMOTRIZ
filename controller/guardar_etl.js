@@ -153,17 +153,19 @@ etl.post = async (req, res) => {
     if(constantes.consulta != '' ){/* *************************************************************************************************************************************************** */
 
 
-                        try {
-                            const pool = await dbdatos.getConnection(); //CONEXION A LA BASE DE DATOS
+                    try {
+                            dbdatos.close();
+                            const pool_destino = await dbdatos.getConnection_destino(); //CONEXION A LA BASE DE DATOS DESTINO
+                            const pool_origen = await dbdatos.getConnection_origen();   //CONEXION A LA BASE DE DATOS ORIGEN
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
-                            const campos_tabla_olap = await pool.request().query(
+                            const campos_tabla_olap = await pool_destino.request().query(
                                 `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, CHARACTER_MAXIMUM_LENGTH as longitud_maxima, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
                             constantes.campos_tabla_olap = campos_tabla_olap.recordset;
                             
                             
                             //OBTENER LOS CAMPOS DE LA BASE DE DATOS ORIGEN SELECCIONADA O DE LA CONSULTA
-                            const campos_tabla_oltp = await pool.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
+                            const campos_tabla_oltp = await pool_origen.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
 
                             if(constantes.campos_tabla_oltp.length === 0 ){
                                         const campos = campos_tabla_oltp.recordset;
@@ -247,6 +249,7 @@ etl.post = async (req, res) => {
                                     )
                                     const datos = JSON.stringify(dbdatos, null , 2);
                                     guardar_etl(datos)
+                                    
                                 }
 
                                 iniciar();
@@ -256,11 +259,11 @@ etl.post = async (req, res) => {
 
                 
                             mensaje = '_';
-                        } catch (error) {
+                    } catch (error) {
                             mensaje = error;
                             constantes.destino =  'seleccione una tabla';
                             constantes.campos_tabla_oltp = [];
-                        }
+                    }
 
 
     }/* *************************************************************************************************************************************************************************** */

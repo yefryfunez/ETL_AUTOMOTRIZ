@@ -21,61 +21,130 @@
 
         <!--------------------- FORMULARIO PARA INSERTAR LAS CREDENCIALES A LA BASE DE DATOS---------------------- -->
         
-        <div class="container">
-            
+        <div class="container" style="max-width: 800px;">
+
             <form action="/guardar_credenciales" method="post">
-                <% if (dbdatos.config.server == undefined) { %>
-                    <div class="form-group">
+                <% if (dbdatos.config_origen.server == undefined) { %>
+
+                    <div style="max-width: 350; margin-left: 10px;" class="form-group">
                         <label for="proyecto">Nombre del proyecto:</label>
-                        <input type="text" id="proyecto" name="proyecto" required >
-                    </div>
-                    <div class="form-group">
-                        <label for="server">server:</label>
-                        <input type="text" id="server" name="server" required >
-                    </div>
-                    <div class="form-group">
-                        <label for="user">user:</label>
-                        <input type="text" id="user" name="user" required >
-                    </div>
-                    <div class="form-group">
-                        <label for="password">password:</label>
-                        <input type="password" id="password" name="password" required >
-                    </div>
-                    <div class="form-group">
-                        <label for="oltp">base de datos origen (OLTP):</label>
-                        <input type="text" id="oltp" name="origen" required  >
-                    </div>
-                    <div class="form-group">
-                        <label for="olap">base de datos destino (OLAP):</label>
-                        <input type="text" id="olap" name="destino" required >
+                        <input  type="text" id="proyecto" name="proyecto" required >
                     </div>
 
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td >
+                                    <div class="container">
+                                        <h5>Conexion origen</h5>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="server">server:</label>
+                                            <input type="text" id="server" name="server_origen" required value="localhost">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="user">user:</label>
+                                            <input type="text" id="user" name="user_origen" required value="sa">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">password:</label>
+                                            <input type="password" id="password" name="password_origen" required >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="oltp">base de datos origen (OLTP):</label>
+                                            <input type="text" id="oltp" name="origen" required value="AUTOMOTRIZ" >
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="container" >
+                                        <h5>Conexion destino</h5>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="server">server:</label>
+                                            <input type="text" id="server" name="server_destino" required value="localhost">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="user">user:</label>
+                                            <input type="text" id="user" name="user_destino" required value="sa">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">password:</label>
+                                            <input type="password" id="password" name="password_destino" required >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="olap">base de datos destino (OLAP):</label>
+                                            <input type="text" id="olap" name="destino" required value="DW_AUTOMOTRIZ">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+
+
+
+ 
                 <% } else { %>
-                    <div class="form-group">
+
+                     <div style="max-width: 350; margin-left: 10px;" class="form-group">
                         <label for="proyecto">Nombre del proyecto:</label>
-                        <input type="text" id="proyecto" name="proyecto" required value="<%=dbdatos.proyecto %>">
+                        <input  type="text" id="proyecto" name="proyecto" required value="<%=dbdatos.proyecto %>">
                     </div>
-                    <div class="form-group">
-                        <label for="server">server:</label>
-                        <input type="text" id="server" name="server" required value="<%=dbdatos.config.server %>">
-                    </div>
-                    <div class="form-group">
-                        <label for="user">user:</label>
-                        <input type="text" id="user" name="user" required value="<%=dbdatos.config.user %>">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">password:</label>
-                        <input type="password" id="password" name="password" required value="<%=dbdatos.config.password %>">
-                    </div>
-                    <div class="form-group">
-                        <label for="oltp">base de datos origen (OLTP):</label>
-                        <input type="text" id="oltp" name="origen" required value="<%=dbdatos.databases.origen%>">
-                    </div>
-                    <div class="form-group">
-                        <label for="olap">base de datos destino (OLAP):</label>
-                        <input type="text" id="olap" name="destino" required  value="<%=dbdatos.databases.destino%>">
-                    </div>
+
+
+
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td >
+                                    <div class="container">
+                                        <h5>Conexion origen</h5>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="server">server:</label>
+                                            <input type="text" id="server" name="server_origen" required value="<%=dbdatos.config_origen.server %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="user">user:</label>
+                                            <input type="text" id="user" name="user_origen" required value="<%=dbdatos.config_origen.user %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">password:</label>
+                                            <input type="password" id="password" name="password_origen" required value="<%=dbdatos.config_origen.password %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="oltp">base de datos origen (OLTP):</label>
+                                            <input type="text" id="oltp" name="origen" required value="<%=dbdatos.databases.origen %>" >
+                                        </div>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="container" >
+                                        <h5>Conexion destino</h5>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="server">server:</label>
+                                            <input type="text" id="server" name="server_destino" required value="<%=dbdatos.config_destino.server %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="user">user:</label>
+                                            <input type="text" id="user" name="user_destino" required value="<%=dbdatos.config_destino.user %>">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">password:</label>
+                                            <input type="password" id="password" name="password_destino" required value="<%=dbdatos.config_destino.password %>" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="olap">base de datos destino (OLAP):</label>
+                                            <input type="text" id="olap" name="destino" required value="<%=dbdatos.databases.destino %>">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
 
 

@@ -21,7 +21,8 @@ function leer_datos(){
          }
          try {
             const dbdatoss = JSON.parse(data);
-            dbdatos.config = dbdatoss.config;
+            dbdatos.config_origen = dbdatoss.config_origen;
+            dbdatos.config_destino = dbdatoss.config_destino;
             dbdatos.proyecto = dbdatoss.proyecto;
             dbdatos.lista_etl = dbdatoss.lista_etl;
             dbdatos.tablas_origen =  dbdatoss.tablas_origen;
@@ -214,16 +215,18 @@ actualizar_etl.post = async (req, res) => {
 
                         try {
             if(respuesta.etl === undefined){
-                            const pool = await dbdatos.getConnection(); //CONEXION A LA BASE DE DATOS
+                            dbdatos.close();
+                            const pool_destino = await dbdatos.getConnection_destino(); //CONEXION A LA BASE DE DATOS DESTINO
+                            const pool_origen = await dbdatos.getConnection_origen();   //CONEXION A LA BASE DE DATOS ORIGEN
                             
                             //OBTENER LOS CAMPOS EL TIPO DE DATO Y LA LONGITUD DE LA TABLA DE LA BASE DE DATOS DESTINO Y GUARDARLOS EN UN ARREGLO
-                            const campos_tabla_olap = await pool.request().query(
+                            const campos_tabla_olap = await pool_destino.request().query(
                                 `use ${dbdatos.databases.destino}; select column_name campo_destino, data_type tipo_dato, CHARACTER_MAXIMUM_LENGTH as longitud, CHARACTER_MAXIMUM_LENGTH as longitud_maxima, 'Normal' as modificar, 'no' as concatenar from information_schema.columns where table_name = '${constantes.destino.replace('[','').replace(']','')}'`);
                             constantes.campos_tabla_olap = campos_tabla_olap.recordset;
                             
                             
                             //OBTENER LOS CAMPOS DE LA BASE DE DATOS ORIGEN SELECCIONADA O DE LA CONSULTA
-                            const campos_tabla_oltp = await pool.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
+                            const campos_tabla_oltp = await pool_origen.request().query(`use ${dbdatos.databases.origen}; ${constantes.consulta.replace('select', 'select top(1) ')}`)
                             if(constantes.campos_tabla_oltp.length === 0){
                                         const campos = campos_tabla_oltp.recordset;
                                         constantes.campos_tabla_oltp.push('ninguno')
@@ -267,7 +270,7 @@ actualizar_etl.post = async (req, res) => {
                                                     // console.log(campos);
                                                     if(campos != '')
                                                         constantes.consulta = `select ${campos} from ${constantes.origen};`
-                                                        console.log(constantes.consulta)
+                                                        
                                         }else{
                                                     if(constantes.consulta != '' && respuesta.campo_origen != undefined){
 

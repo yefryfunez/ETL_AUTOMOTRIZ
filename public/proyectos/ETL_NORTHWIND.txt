@@ -1,5 +1,12 @@
 {
-  "config": {
+  "config_origen": {
+    "user": "sa",
+    "password": "yefry",
+    "server": "localhost",
+    "trustServerCertificate": true,
+    "encrypt": false
+  },
+  "config_destino": {
     "user": "sa",
     "password": "yefry",
     "server": "localhost",
@@ -9,8 +16,8 @@
   "proyecto": "ETL_NORTHWIND",
   "lista_etl": [
     {
-      "tipo": "consulta",
-      "origen": "seleccione una tabla",
+      "tipo": "tabla",
+      "origen": "[Products]",
       "destino": "[Products]",
       "campos_tabla_olap": [
         {
@@ -45,7 +52,7 @@
         "ReorderLevel",
         "Discontinued"
       ],
-      "consulta": "select * from products;"
+      "consulta": "select ProductID, ProductName from [Products];"
     },
     {
       "tipo": "tabla",
@@ -80,8 +87,8 @@
       "consulta": "select ShipperID, CompanyName from [Shippers];"
     },
     {
-      "tipo": "consulta",
-      "origen": "seleccione una tabla",
+      "tipo": "tabla",
+      "origen": "[Employees]",
       "destino": "[Employees]",
       "campos_tabla_olap": [
         {
@@ -99,16 +106,35 @@
           "longitud": "100",
           "longitud_maxima": 100,
           "modificar": "Normal",
-          "concatenar": "no",
-          "campo_origen": "Nombre"
+          "concatenar": "si",
+          "campo_origen": [
+            "LastName",
+            "FirstName"
+          ]
         }
       ],
       "campos_tabla_oltp": [
         "ninguno",
         "EmployeeID",
-        "Nombre"
+        "LastName",
+        "FirstName",
+        "Title",
+        "TitleOfCourtesy",
+        "BirthDate",
+        "HireDate",
+        "Address",
+        "City",
+        "Region",
+        "PostalCode",
+        "Country",
+        "HomePhone",
+        "Extension",
+        "Photo",
+        "Notes",
+        "ReportsTo",
+        "PhotoPath"
       ],
-      "consulta": "select EmployeeID, CONCAT(FirstName, ' ', LastName) Nombre from Employees"
+      "consulta": "select EmployeeID, LastName, FirstName from [Employees];"
     },
     {
       "tipo": "consulta",

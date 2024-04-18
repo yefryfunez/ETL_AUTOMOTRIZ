@@ -1,17 +1,21 @@
 const sql = require('mssql');
 const dbdatos = {} ;
-dbdatos.config = {}
-
+dbdatos.config_origen = {}
+dbdatos.config_destino = {}
 dbdatos.proyecto = '';
 dbdatos.lista_etl = [];
 
-dbdatos.getConnection = async () =>{
-    const pool = await sql.connect(dbdatos.config)
+dbdatos.getConnection_origen = async () =>{
+    const pool = await sql.connect(dbdatos.config_origen)
+    return pool;
+}
+dbdatos.getConnection_destino = async () =>{
+    const pool = await sql.connect(dbdatos.config_destino)
     return pool;
 }
 
 dbdatos.close = async () =>{
-    const pool = await sql.close()
+    await sql.close()
 }
 
 dbdatos.databases = {
@@ -23,7 +27,8 @@ dbdatos.tablas_destino = [];
 dbdatos.tipo_de_dato = [];
 
 dbdatos.iniciar = () => {
-    dbdatos.config = {};
+    dbdatos.config_origen = {};
+    dbdatos.config_destino = {};
     dbdatos.proyecto = '';
     dbdatos.lista_etl = [];
     dbdatos.tablas_origen =  [];

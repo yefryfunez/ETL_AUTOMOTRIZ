@@ -21,7 +21,8 @@ function obtener_proyecto(nombre_proyecto){
     try {
         const data = fs.readFileSync(path.join(__dirname, '..', 'public', 'proyectos', nombre_proyecto),'utf8');
         const dbdatoss = JSON.parse(data);
-        dbdatos.config = dbdatoss.config;
+        dbdatos.config_origen = dbdatoss.config_origen;
+        dbdatos.config_destino = dbdatoss.config_destino;
         dbdatos.proyecto = dbdatoss.proyecto;
         dbdatos.lista_etl = dbdatoss.lista_etl;
         dbdatos.tablas_origen =  dbdatoss.tablas_origen;
@@ -67,7 +68,8 @@ proyectos.post = async (req, res) => {
     if(respuesta.proyecto != undefined){
         obtener_proyecto(respuesta.proyecto)
         dbdatos.close();
-        await dbdatos.getConnection();
+        await dbdatos.getConnection_origen();
+        await dbdatos.getConnection_destino();
         res.redirect('/etls')
         return;
     }

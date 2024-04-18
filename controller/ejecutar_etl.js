@@ -61,11 +61,12 @@ ejecutar_etl.post = async (req, res) => {
     if(dbdatos.lista_etl.length >= 0){//1IF------------------------------------------------------------------------------------------------------------------------------------------------------- 
         
         try {
-                    const pool = await dbdatos.getConnection();//crear una conexion
+                    const pool_destino = await dbdatos.getConnection_destino(); //CONEXION A LA BASE DE DATOS DESTINO
+                    const pool_origen = await dbdatos.getConnection_origen();   //CONEXION A LA BASE DE DATOS ORIGEN
                     
                     
                     /* ********************************************** limpiar tablas del data warehouse ************************************************************ */
-                    await pool.request().query(`use ${dbdatos.databases.destino}; EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'; EXEC sp_MSForEachTable 'DELETE FROM ?'; EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; `)
+                    await pool_destino.request().query(`use ${dbdatos.databases.destino}; EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'; EXEC sp_MSForEachTable 'DELETE FROM ?'; EXEC sp_msforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; `)
                     
 
 
@@ -77,7 +78,7 @@ ejecutar_etl.post = async (req, res) => {
                     for(let elemento of dbdatos.lista_etl){
                            filas_afectadas = 0; 
                            mensaje = '_';
-                            let datos = await pool.request().query(`use ${dbdatos.databases.origen}; ${elemento.consulta}`);//obtener los datos de la tabla origen especificada en el etl
+                            let datos = await pool_origen.request().query(`use ${dbdatos.databases.origen}; ${elemento.consulta}`);//obtener los datos de la tabla origen especificada en el etl
                             datos = datos.recordset;
 
 
@@ -158,7 +159,7 @@ ejecutar_etl.post = async (req, res) => {
                                 let tipo_dato = '';
                                 for(let objeto of datos_modificados){
                                     let icampos = 0;
-                                    const request = pool.request();
+                                    const request = pool_destino.request();
                                             for(let prop in objeto){
                                                 try{
                                                         if(elemento.campos_tabla_olap[icampos].campo_origen === 'ninguno') icampos++;
